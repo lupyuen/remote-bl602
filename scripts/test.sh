@@ -92,7 +92,6 @@ echo
 echo "----- TODO: Capture the BL602 output over USB UART"
 sleep 5
 kill %1
-echo
 
 echo "----- Disable GPIO 2"
 echo 2 >/sys/class/gpio/unexport
