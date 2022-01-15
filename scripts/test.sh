@@ -96,7 +96,4 @@ echo "----- TODO: Record the BL602 Output for Crash Analysis"
 sleep 5
 kill %1
 
-echo "----- Disable GPIO 2"
-echo 2 >/sys/class/gpio/unexport
-
-##  We don't disable GPIO 3 because otherwise BL602 will keep rebooting
+##  We don't disable GPIO 2 and 3 because otherwise BL602 will keep rebooting
