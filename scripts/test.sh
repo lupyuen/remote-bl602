@@ -21,8 +21,7 @@ source $HOME/.cargo/env
 set +x  ##  Disable echo
 echo "----- Download the latest Upstream NuttX Release"
 set -x  ##  Enable echo
-####wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/upstream-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
-wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/release-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
+wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/upstream-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
 pushd /tmp
 unzip -o nuttx.zip
 popd
@@ -97,4 +96,4 @@ echo "----- TODO: Record the BL602 Output for Crash Analysis"
 sleep 5
 kill %1
 
-##  We don't disable GPIO 2 and 3 because otherwise BL602 will keep rebooting
+##  We don't disable GPIO 2 and 3 because otherwise BL602 might keep rebooting
