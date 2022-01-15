@@ -16,7 +16,7 @@ set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
 ##  Add Rust to the PATH
-source $HOME/.cargo/bin
+source $HOME/.cargo/env
 
 set +x  ##  Disable echo
 echo "----- Download the latest Upstream NuttX Release"
