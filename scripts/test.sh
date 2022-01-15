@@ -53,6 +53,14 @@ sleep 1
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602 again)"
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 0 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
+
 echo "----- BL602 is now in Flashing Mode"
 echo "----- Flash BL602 over USB UART with blflash"
 set -x  ##  Enable echo
