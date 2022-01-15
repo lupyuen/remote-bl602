@@ -17,7 +17,7 @@ set -x  ##  Echo commands
 ## Download the latest Upstream NuttX Release
 wget https://github.com/lupyuen/incubator-nuttx/releases/download/upstream-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
 pushd /tmp
-unzip nuttx.zip
+unzip -o nuttx.zip
 popd
 
 ## Enable GPIO 2 if not enabled
