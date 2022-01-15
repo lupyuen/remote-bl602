@@ -41,18 +41,6 @@ echo "----- Set GPIO 2 and 3 as output"
 echo out >/sys/class/gpio/gpio2/direction
 echo out >/sys/class/gpio/gpio3/direction
 
-echo "----- Set GPIO 2 to Low (BL602 Normal Mode)"
-echo 0 >/sys/class/gpio/gpio2/value
-sleep 1
-
-echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
-echo 1 >/sys/class/gpio/gpio3/value
-sleep 1
-echo 0 >/sys/class/gpio/gpio3/value
-sleep 1
-echo 1 >/sys/class/gpio/gpio3/value
-sleep 1
-
 echo "----- Set GPIO 2 to High (BL602 Flashing Mode)"
 echo 1 >/sys/class/gpio/gpio2/value
 sleep 1
