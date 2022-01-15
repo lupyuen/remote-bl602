@@ -14,7 +14,8 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
-## TODO: Download the latest Upstream NuttX Release from https://github.com/lupyuen/incubator-nuttx/releases/latest
+## Download the latest Upstream NuttX Release
+wget https://github.com/lupyuen/incubator-nuttx/releases/download/upstream-$(date +'%Y-%m-%d')/nuttx.zip
 
 ## Enable GPIO 2 if not enabled
 if [ ! -d /sys/class/gpio/gpio2 ]; then
