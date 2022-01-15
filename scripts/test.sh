@@ -51,21 +51,35 @@ sleep 1
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 
-# echo "----- Set GPIO 2 to High (BL602 Flashing Mode)"
-# echo 1 >/sys/class/gpio/gpio2/value
+echo "----- Set GPIO 2 to High (BL602 Flashing Mode)"
+echo 1 >/sys/class/gpio/gpio2/value
+sleep 1
 
-# ## TODO: Toggle GPIO 3 (Reset BL602) and flash BL602 over USB UART with blflash
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 0 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
 
-# ## Wait a while (for testing)
-# sleep 10
+echo "----- TODO: Flash BL602 over USB UART with blflash"
+sleep 10
 
-# echo "----- Set GPIO 2 to Low (BL602 Non-Flashing Mode)"
-# echo 0 >/sys/class/gpio/gpio2/value
+echo "----- Set GPIO 2 to Low (BL602 Non-Flashing Mode)"
+echo 0 >/sys/class/gpio/gpio2/value
+sleep 1
 
-# ## TODO: Toggle GPIO 3 (Reset BL602) and capture the BL602 output over USB UART
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 0 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
 
-# ## Wait a while (for testing)
-# sleep 10
+echo "----- TODO: Capture the BL602 output over USB UART"
+sleep 10
 
 echo "----- Disable GPIO 2"
 echo 2 >/sys/class/gpio/unexport
