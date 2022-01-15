@@ -26,6 +26,10 @@ Connect SBC to to BL602 like so...
 To run it...
 
 ```bash
+##  Install blflash for flashing BL602
+cargo install blflash
+
+##  Auto flash and test BL602
 sudo scripts/test.sh
 ```
 

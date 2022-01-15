@@ -68,8 +68,8 @@ sleep 2
 kill %1
 echo
 
-echo "----- TODO: Flash BL602 over USB UART with blflash"
-## blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
+echo "----- Flash BL602 over USB UART with blflash"
+blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 sleep 1
 
 echo "----- Set GPIO 2 to Low (BL602 Normal Mode)"
@@ -95,6 +95,7 @@ sleep 1
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 
+echo
 echo "----- TODO: Capture the BL602 output over USB UART"
 sleep 5
 kill %1
