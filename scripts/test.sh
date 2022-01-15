@@ -72,8 +72,10 @@ sleep 1
 # echo
 
 echo "----- Flash BL602 over USB UART with blflash"
+set -x  ##  Enable echo
 blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 sleep 1
+set +x  ##  Disable echo
 
 echo "----- Set GPIO 2 to Low (BL602 Normal Mode)"
 echo 0 >/sys/class/gpio/gpio2/value
