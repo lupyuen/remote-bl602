@@ -27,12 +27,10 @@ unzip -o nuttx.zip
 popd
 set +x  ##  Disable echo
 
-echo "----- Enable GPIO 2"
+echo "----- Enable GPIO 2 and 3"
 if [ ! -d /sys/class/gpio/gpio2 ]; then
     echo 2 >/sys/class/gpio/export
 fi
-
-echo "----- Enable GPIO 3"
 if [ ! -d /sys/class/gpio/gpio3 ]; then
     echo 3 >/sys/class/gpio/export
 fi
