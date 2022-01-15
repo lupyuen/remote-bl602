@@ -9,6 +9,7 @@
 ## | -------|----------|----------
 ## | GPIO 2 | GPIO 8   | Flashing Mode
 ## | GPIO 3 | GPIO RST | Reset
+## Remember to install blflash: cargo install blflash
 ## Based on https://www.ics.com/blog/gpio-programming-using-sysfs-interface
 
 set -e  ##  Exit when any command fails
@@ -62,6 +63,7 @@ echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 
 echo "----- TODO: Flash BL602 over USB UART with blflash"
+## blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 sleep 10
 
 echo "----- Set GPIO 2 to Low (BL602 Non-Flashing Mode)"
