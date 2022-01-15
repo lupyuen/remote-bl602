@@ -10,6 +10,9 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
+## Show enabled GPIOs
+ls /sys/class/gpio/
+
 ## Enable GPIO 2
 echo 2 >/sys/class/gpio/export
 ls /sys/class/gpio/
