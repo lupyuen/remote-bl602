@@ -9,11 +9,14 @@
 ## | -------|----------|----------
 ## | GPIO 2 | GPIO 8   | Flashing Mode
 ## | GPIO 3 | GPIO RST | Reset
-## Remember to install blflash: cargo install blflash
+## Remember to install blflash as superuser: sudo cargo install blflash
 ## Based on https://www.ics.com/blog/gpio-programming-using-sysfs-interface
 
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
+
+##  Add Rust to the PATH
+source $HOME/.cargo/bin
 
 set +x  ##  Disable echo
 echo "----- Download the latest Upstream NuttX Release"

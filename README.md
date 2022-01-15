@@ -30,7 +30,7 @@ To run it...
 sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sudo sh
 
 ##  Install blflash as superuser for flashing BL602
-sudo /root/.cargo/bin/cargo install blflash
+sudo ~root/.cargo/bin/cargo install blflash
 
 ##  Auto flash and test BL602 as superuser
 sudo scripts/test.sh
