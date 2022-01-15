@@ -53,12 +53,7 @@ sleep 1
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 
-# echo "----- BL602 is now in Flashing Mode"
-# cat /dev/ttyUSB0 &
-# sleep 2
-# kill %1
-# echo
-
+echo "----- BL602 is now in Flashing Mode"
 echo "----- Flash BL602 over USB UART with blflash"
 set -x  ##  Enable echo
 blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
@@ -82,6 +77,7 @@ stty -F /dev/ttyUSB0 raw 2000000
 cat /dev/ttyUSB0 &
 
 echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
+echo "----- Here is the BL602 output..."
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 echo 0 >/sys/class/gpio/gpio3/value
