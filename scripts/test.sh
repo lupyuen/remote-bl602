@@ -31,6 +31,8 @@ echo out >/sys/class/gpio/gpio2/direction
 ## Set GPIO 2 to High (BL602 Flashing Mode)
 echo 1 >/sys/class/gpio/gpio2/value
 
+exit ####
+
 ## TODO: Toggle GPIO 3 (Reset BL602) and flash BL602 over USB UART with blflash
 
 ## Wait a while (for testing)
