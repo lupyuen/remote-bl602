@@ -26,10 +26,13 @@ Connect SBC to to BL602 like so...
 To run it...
 
 ```bash
-##  Install blflash for flashing BL602
-cargo install blflash
+##  Install rustup as superuser
+sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sudo sh
 
-##  Auto flash and test BL602
+##  Install blflash as superuser for flashing BL602
+sudo cargo install blflash
+
+##  Auto flash and test BL602 as superuser
 sudo scripts/test.sh
 ```
 
