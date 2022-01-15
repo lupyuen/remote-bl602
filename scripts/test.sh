@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Flash and test BL602 with GPIO Control on Linux SBC.
+## Auto Flash and Test BL602 with GPIO Control on Linux SBC.
 ## (1) Before Flashing BL602: Set GPIO 8 to High and toggle the Reset Pin
 ## (2) Flash BL602 over USB UART with blflash
 ## (3) After Flashing BL602: Set GPIO 8 to Low and toggle the Reset Pin
