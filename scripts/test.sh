@@ -14,31 +14,36 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
-## Download the latest Upstream NuttX Release
+set +x  ##  Disable echo
+echo "----- Download the latest Upstream NuttX Release"
+set -x  ##  Enable echo
 wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/upstream-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
 pushd /tmp
 unzip -o nuttx.zip
 popd
+set +x  ##  Disable echo
 
-## Enable GPIO 2 if not enabled
+set +x  ##  Don't echo commands
+
+echo "----- Enable GPIO 2"
 if [ ! -d /sys/class/gpio/gpio2 ]; then
     echo 2 >/sys/class/gpio/export
 fi
 
-## Enable GPIO 3 if not enabled
+echo "----- Enable GPIO 3"
 if [ ! -d /sys/class/gpio/gpio3 ]; then
     echo 3 >/sys/class/gpio/export
 fi
 
-## Set GPIO 2 and 3 as output
+echo "----- Set GPIO 2 and 3 as output"
 echo out >/sys/class/gpio/gpio2/direction
 echo out >/sys/class/gpio/gpio3/direction
 
-## Set GPIO 2 to Low (BL602 Non-Flashing Mode)
+echo "----- Set GPIO 2 to Low (BL602 Non-Flashing Mode)"
 echo 0 >/sys/class/gpio/gpio2/value
 sleep 1
 
-## Toggle GPIO 3 High-Low-High to Reset BL602
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 echo 0 >/sys/class/gpio/gpio3/value
@@ -46,7 +51,7 @@ sleep 1
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 
-# ## Set GPIO 2 to High (BL602 Flashing Mode)
+# echo "----- Set GPIO 2 to High (BL602 Flashing Mode)"
 # echo 1 >/sys/class/gpio/gpio2/value
 
 # ## TODO: Toggle GPIO 3 (Reset BL602) and flash BL602 over USB UART with blflash
@@ -54,7 +59,7 @@ sleep 1
 # ## Wait a while (for testing)
 # sleep 10
 
-# ## Set GPIO 2 to Low (BL602 Non-Flashing Mode)
+# echo "----- Set GPIO 2 to Low (BL602 Non-Flashing Mode)"
 # echo 0 >/sys/class/gpio/gpio2/value
 
 # ## TODO: Toggle GPIO 3 (Reset BL602) and capture the BL602 output over USB UART
@@ -62,8 +67,8 @@ sleep 1
 # ## Wait a while (for testing)
 # sleep 10
 
-## Disable GPIO 2
+echo "----- Disable GPIO 2"
 echo 2 >/sys/class/gpio/unexport
 
-## Disable GPIO 3
+echo "----- Disable GPIO 3"
 echo 3 >/sys/class/gpio/unexport
