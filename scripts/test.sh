@@ -25,26 +25,45 @@ if [ ! -d /sys/class/gpio/gpio2 ]; then
     echo 2 >/sys/class/gpio/export
 fi
 
-## Set GPIO 2 as output
+## Enable GPIO 3 if not enabled
+if [ ! -d /sys/class/gpio/gpio3 ]; then
+    echo 3 >/sys/class/gpio/export
+fi
+
+## Set GPIO 2 and 3 as output
 echo out >/sys/class/gpio/gpio2/direction
-
-## Set GPIO 2 to High (BL602 Flashing Mode)
-echo 1 >/sys/class/gpio/gpio2/value
-
-exit ####
-
-## TODO: Toggle GPIO 3 (Reset BL602) and flash BL602 over USB UART with blflash
-
-## Wait a while (for testing)
-sleep 10
+echo out >/sys/class/gpio/gpio3/direction
 
 ## Set GPIO 2 to Low (BL602 Non-Flashing Mode)
 echo 0 >/sys/class/gpio/gpio2/value
+sleep 1
 
-## TODO: Toggle GPIO 3 (Reset BL602) and capture the BL602 output over USB UART
+## Toggle GPIO 3 High-Low-High to Reset BL602
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 0 >/sys/class/gpio/gpio3/value
+sleep 1
+echo 1 >/sys/class/gpio/gpio3/value
+sleep 1
 
-## Wait a while (for testing)
-sleep 10
+# ## Set GPIO 2 to High (BL602 Flashing Mode)
+# echo 1 >/sys/class/gpio/gpio2/value
+
+# ## TODO: Toggle GPIO 3 (Reset BL602) and flash BL602 over USB UART with blflash
+
+# ## Wait a while (for testing)
+# sleep 10
+
+# ## Set GPIO 2 to Low (BL602 Non-Flashing Mode)
+# echo 0 >/sys/class/gpio/gpio2/value
+
+# ## TODO: Toggle GPIO 3 (Reset BL602) and capture the BL602 output over USB UART
+
+# ## Wait a while (for testing)
+# sleep 10
 
 ## Disable GPIO 2
 echo 2 >/sys/class/gpio/unexport
+
+## Disable GPIO 3
+echo 3 >/sys/class/gpio/unexport
