@@ -99,5 +99,4 @@ kill %1
 echo "----- Disable GPIO 2"
 echo 2 >/sys/class/gpio/unexport
 
-echo "----- Disable GPIO 3"
-echo 3 >/sys/class/gpio/unexport
+##  We don't disable GPIO 3 because otherwise BL602 will keep rebooting
