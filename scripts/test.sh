@@ -14,7 +14,7 @@ set -x  ##  Echo commands
 ls /sys/class/gpio/
 
 ## Enable GPIO 2 if not enabled
-if [! -d /sys/class/gpio/gpio2 ]; then
+if [ ! -d /sys/class/gpio/gpio2 ]; then
     echo 2 >/sys/class/gpio/export
     ls /sys/class/gpio/
 fi
