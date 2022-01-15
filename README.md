@@ -2,7 +2,7 @@
 
 [(Follow the updates on Twitter)](https://twitter.com/MisterTechBlog/status/1481794711744823296)
 
-This script runs on a Linux Single-Board Computer (SBC) to automagically Flash and Test BL602, with the latest upstream build of Apache NuttX OS.
+This script runs on a Linux Single-Board Computer (SBC) to automagically Flash and Test BL602, with the Latest Daily Build of Apache NuttX OS.
 
 See [scripts/test.sh](scripts/test.sh)
 
