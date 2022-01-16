@@ -20,13 +20,18 @@ if [ "$BUILD_PREFIX" == '' ]; then
     export BUILD_PREFIX=upstream
 fi
 
+##  Default Build Date is today (YYYY-MM-DD)
+if [ "$BUILD_DATE" == '' ]; then
+    export BUILD_DATE=$(date +'%Y-%m-%d')
+fi
+
 ##  Add Rust to the PATH
 source $HOME/.cargo/env
 
 set +x  ##  Disable echo
-echo "----- Download the latest $BUILD_PREFIX NuttX build"
+echo "----- Download the latest $BUILD_PREFIX NuttX build for $BUILD_DATE"
 set -x  ##  Enable echo
-wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/$BUILD_PREFIX-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
+wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/$BUILD_PREFIX-$BUILD_DATE/nuttx.zip -O /tmp/nuttx.zip
 pushd /tmp
 unzip -o nuttx.zip
 popd
@@ -95,6 +100,9 @@ echo 0 >/sys/class/gpio/gpio3/value
 sleep 1
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
+
+echo "----- Send command to BL602"
+echo "lorawan_test" >/dev/ttyUSB0
 
 echo
 echo "----- TODO: Record the BL602 Output for Crash Analysis"
