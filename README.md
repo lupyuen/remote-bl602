@@ -179,7 +179,7 @@ Below is the log for the __Release Build__ (includes the LoRaWAN Stack)...
 
 ```text
 pi@raspberrypi:~/remote-bl602 $ sudo bash
-root@raspberrypi:/home/pi/remote-bl602# export BUILD_PREFIX=release; ./scripts/test.sh 
+root@raspberrypi:/home/pi/remote-bl602# export BUILD_PREFIX=release; ./scripts/test.sh
 + '[' release == '' ']'
 + '[' '' == '' ']'
 ++ date +%Y-%m-%d
@@ -194,14 +194,14 @@ root@raspberrypi:/home/pi/remote-bl602# export BUILD_PREFIX=release; ./scripts/t
 /tmp /home/pi/remote-bl602
 + unzip -o nuttx.zip
 Archive:  nuttx.zip
-  inflating: nuttx                   
-  inflating: nuttx.S                 
-  inflating: nuttx.bin               
-  inflating: nuttx.board             
-  inflating: nuttx.config            
-  inflating: nuttx.hex               
-  inflating: nuttx.manifest          
-  inflating: nuttx.map               
+  inflating: nuttx
+  inflating: nuttx.S
+  inflating: nuttx.bin
+  inflating: nuttx.board
+  inflating: nuttx.config
+  inflating: nuttx.hex
+  inflating: nuttx.manifest
+  inflating: nuttx.map
 + popd
 /home/pi/remote-bl602
 + set +x
@@ -215,14 +215,14 @@ Archive:  nuttx.zip
 + blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 [INFO  blflash::flasher] Start connection...
 [TRACE blflash::flasher] 5ms send count 55
-[TRACE blflash::flasher] handshake sent elapsed 401.848µs
+[TRACE blflash::flasher] handshake sent elapsed 302.868µs
 [INFO  blflash::flasher] Connection Succeed
 [INFO  blflash] Bootrom version: 1
 [TRACE blflash] Boot info: BootInfo { len: 14, bootrom_version: 1, otp_info: [0, 0, 0, 0, 3, 0, 0, 0, 61, 9d, c0, 5, b9, 18, 1d, 0] }
 [INFO  blflash::flasher] Sending eflash_loader...
-[INFO  blflash::flasher] Finished 2.553939075s 11.19KiB/s
+[INFO  blflash::flasher] Finished 2.559899883s 11.17KiB/s
 [TRACE blflash::flasher] 5ms send count 500
-[TRACE blflash::flasher] handshake sent elapsed 5.215831ms
+[TRACE blflash::flasher] handshake sent elapsed 5.19733ms
 [INFO  blflash::flasher] Entered eflash_loader
 [INFO  blflash::flasher] Skip segment addr: 0 size: 47504 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: e000 size: 272 sha256 matches
@@ -236,9 +236,9 @@ Archive:  nuttx.zip
 ----- BL602 is now in Normal Mode
 ----- Toggle GPIO 3 High-Low-High (Reset BL602)
 ----- Here is the BL602 Output...
-�
+▒
 NuttShell (NSH) NuttX-10.2.0-RC0
-nsh> 
+nsh>
 ----- Send command to BL602: lorawan_test
 lorawan_test
 
@@ -272,7 +272,7 @@ process_dio1 started
 process_dio1: event=0x42015ab8
 init_spi
 SX126xSetTxParams: power=22, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
 TimerInit:     0x420179fc
 TimerInit:     0x42017b2c
 RadioSetModem
@@ -300,16 +300,16 @@ TimerInit:     0x4201645c
 TODO: RtcGetCalendarTime
 TODO: RtcBkupRead
 TODO: RtcBkupRead
-RadioSetChannel: freq=923200000
+RadioSetChannel: freq=923400000
 RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
 RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=255, CrcMode=1, InvertIQ=0
 RadioStandby
 RadioSetModem
 SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
 SecureElementRandomNumber: 0x13e7c3db
 RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b db c3 9c ac 19 29 
+00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b db c3 9c ac 19 29
 RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
 TimerStop:     0x420179fc
 TimerStart2:   0x420179fc, 4000 ms
@@ -339,337 +339,206 @@ DIO1 add event
 handle_event_queue: ev=0x42015ab8
 RadioOnDioIrq
 RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x420179fc
-callout_handler: lock
-handle_event_queue: ev=0x420179fc
-RadioOnTxTimeoutIrq
+IRQ_TX_DONE
+TimerStop:     0x420179fc
+TODO: RtcGetCalendarTime
+TODO: RtcBkupRead
 RadioOnDioIrq
 RadioIrqProcess
 RadioSleep
 DIO1 add event
+TimerSetValue: 0x42016848, 4988 ms
+TimerStart:    0x42016848
+TimerStop:     0x42016848
+TimerStart2:   0x42016848, 4988 ms
+callout_reset: evq=0x42017b48, ev=0x42016848
+TimerSetValue: 0x42016864, 5988 ms
+TimerStart:    0x42016864
+TimerStop:     0x42016864
+TimerStart2:   0x42016864, 5988 ms
+callout_reset: evq=0x42017b48, ev=0x42016864
+TODO: RtcGetCalendarTime
+handle_event_queue: ev=0x42015ab8
+RadioOnDioIrq
+RadioIrqProcess
+RadioOnDioIrq
+RadioIrqProcess
+callout_handler: unlock
+callout_handler: evq=0x42017b48, ev=0x42016848
+callout_handler: lock
+handle_event_queue: ev=0x42016848
+TimerStop:     0x42016848
+RadioStandby
+RadioSetChannel: freq=923400000
+RadioSetRxConfig
+RadioStandby
+RadioSetModem
+RadioSetRxConfig done
+RadioRx
+TimerStop:     0x42017b2c
+TimerStart2:   0x42017b2c, 3000 ms
+callout_reset: evq=0x42017b48, ev=0x42017b2c
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x42015ab8
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_PREAMBLE_DETECTED
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x42015ab8
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_HEADER_VALID
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x42015ab8
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_RX_DONE
+TimerStop:     0x42017b2c
+RadioOnDioIrq
+RadioIrqProcess
+RadioSleep
+DIO1 add event
+TimerStop:     0x42016864
 OnTxData
 
 ###### =========== MLME-Confirm ============ ######
-STATUS      : Tx timeout
+STATUS      : OK
 OnJoinRequest
+###### ===========   JOINED     ============ ######
+
+OTAA
+
+DevAddr     :  004E60A6
+
+
+DATA RATE   : DR_2
+
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+UplinkProcess
+PrepareTxFrame: Transmit to LoRaWAN: Hi NuttX (9 bytes)
+PrepareTxFrame: status=0, maxSize=11, currentSize=11
+LmHandlerSend: Data frame
 TODO: RtcGetCalendarTime
-TODO: RtcBkupRead
 TODO: RtcBkupRead
 RadioSetChannel: freq=923200000
-RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
-RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
+RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=9, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
+RadioSetTxConfig: SpreadingFactor=9, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=128, CrcMode=1, InvertIQ=0
 RadioStandby
 RadioSetModem
 SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
-SecureElementRandomNumber: 0xace6bf8f
-RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b 8f bf 69 39 a2 d4 
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
+RadioSend: size=22
+40 a6 60 4e 00 00 01 00 01 fe 4f b0 c0 4a 0f bd c5 15 c0 f5 74 d8
+RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=22, CrcMode=1, InvertIQ=0
 TimerStop:     0x420179fc
 TimerStart2:   0x420179fc, 4000 ms
 callout_reset: evq=0x42017b48, ev=0x420179fc
 
-###### =========== MLME-Request ============ ######
-######               MLME_JOIN               ######
+###### =========== MCPS-Request ============ ######
+######           MCPS_UNCONFIRMED            ######
 ###### ===================================== ######
 STATUS      : OK
+PrepareTxFrame: Transmit OK
 handle_event_queue: ev=0x42015ab8
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
 DIO1 add event
+handle_event_queue: ev=0x42015ab8
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_TX_DONE
+TimerStop:     0x420179fc
+TODO: RtcGetCalendarTime
+TODO: RtcBkupRead
+RadioOnDioIrq
+RadioIrqProcess
+RadioSleep
+DIO1 add event
+TimerSetValue: 0x42016848, 980 ms
+TimerStart:    0x42016848
+TimerStop:     0x42016848
+TimerStart2:   0x42016848, 980 ms
+callout_reset: evq=0x42017b48, ev=0x42016848
+TimerSetValue: 0x42016864, 1988 ms
+TimerStart:    0x42016864
+TimerStop:     0x42016864
+TimerStart2:   0x42016864, 1988 ms
+callout_reset: evq=0x42017b48, ev=0x42016864
+TODO: RtcGetCalendarTime
 handle_event_queue: ev=0x42015ab8
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
 callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x420179fc
+callout_handler: evq=0x42017b48, ev=0x42016848
 callout_handler: lock
-handle_event_queue: ev=0x420179fc
-RadioOnTxTimeoutIrq
+handle_event_queue: ev=0x42016848
+TimerStop:     0x42016848
+RadioStandby
+RadioSetChannel: freq=923200000
+RadioSetRxConfig
+RadioStandby
+RadioSetModem
+RadioSetRxConfig done
+RadioRx
+TimerStop:     0x42017b2c
+TimerStart2:   0x42017b2c, 3000 ms
+callout_reset: evq=0x42017b48, ev=0x42017b2c
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x42015ab8
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_RX_TX_TIMEOUT
+TimerStop:     0x42017b2c
 RadioOnDioIrq
 RadioIrqProcess
 RadioSleep
 DIO1 add event
+TimerStop:     0x42016864
+TimerStop:     0x4201682c
 OnTxData
 
-###### =========== MLME-Confirm ============ ######
-STATUS      : Tx timeout
-OnJoinRequest
-TODO: RtcGetCalendarTime
-TODO: RtcBkupRead
-TODO: RtcBkupRead
-RadioSetChannel: freq=923400000
-RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
-RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-RadioStandby
-RadioSetModem
-SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
-SecureElementRandomNumber: 0xa9a2819e
-RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b 9e 81 d9 d5 2a 0f 
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
-
-###### =========== MLME-Request ============ ######
-######               MLME_JOIN               ######
-###### ===================================== ######
+###### =========== MCPS-Confirm ============ ######
 STATUS      : OK
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-DIO1 add event
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x420179fc
-callout_handler: lock
-handle_event_queue: ev=0x420179fc
-RadioOnTxTimeoutIrq
-RadioOnDioIrq
-RadioIrqProcess
-RadioSleep
-DIO1 add event
-OnTxData
 
-###### =========== MLME-Confirm ============ ######
-STATUS      : Tx timeout
-OnJoinRequest
-TODO: RtcGetCalendarTime
-TODO: RtcBkupRead
-TODO: RtcBkupRead
-RadioSetChannel: freq=923400000
-RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
-RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-RadioStandby
-RadioSetModem
-SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
-SecureElementRandomNumber: 0xd05ca6c4
-RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b c4 a6 e3 48 db 0b 
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
+###### =====   UPLINK FRAME        1   ===== ######
 
-###### =========== MLME-Request ============ ######
-######               MLME_JOIN               ######
-###### ===================================== ######
-STATUS      : OK
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-DIO1 add event
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x420179fc
-callout_handler: lock
-handle_event_queue: ev=0x420179fc
-RadioOnTxTimeoutIrq
-RadioOnDioIrq
-RadioIrqProcess
-RadioSleep
-DIO1 add event
-OnTxData
+CLASS       : A
 
-###### =========== MLME-Confirm ============ ######
-STATUS      : Tx timeout
-OnJoinRequest
-TODO: RtcGetCalendarTime
-TODO: RtcBkupRead
-TODO: RtcBkupRead
-RadioSetChannel: freq=923400000
-RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
-RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-RadioStandby
-RadioSetModem
-SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
-SecureElementRandomNumber: 0xc3da47ef
-RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b ef 47 26 ad 17 40 
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
+TX PORT     : 1
+TX DATA     : UNCONFIRMED
+48 69 20 4E 75 74 74 58 00
 
-###### =========== MLME-Request ============ ######
-######               MLME_JOIN               ######
-###### ===================================== ######
-STATUS      : OK
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-DIO1 add event
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x420179fc
-callout_handler: lock
-handle_event_queue: ev=0x420179fc
-RadioOnTxTimeoutIrq
-RadioOnDioIrq
-RadioIrqProcess
-RadioSleep
-DIO1 add event
-OnTxData
+DATA RATE   : DR_3
+U/L FREQ    : 923200000
+TX POWER    : 0
+CHANNEL MASK: 0003
 
-###### =========== MLME-Confirm ============ ######
-STATUS      : Tx timeout
-OnJoinRequest
-TODO: RtcGetCalendarTime
-TODO: RtcBkupRead
-TODO: RtcBkupRead
-RadioSetChannel: freq=923400000
-RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
-RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-RadioStandby
-RadioSetModem
-SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
-SecureElementRandomNumber: 0x38b95260
-RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b 60 52 b6 38 e4 45 
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
-
-###### =========== MLME-Request ============ ######
-######               MLME_JOIN               ######
-###### ===================================== ######
-STATUS      : OK
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+UplinkProcess
 handle_event_queue: ev=0x42015ab8
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
-DIO1 add event
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x420179fc
-callout_handler: lock
-handle_event_queue: ev=0x420179fc
-RadioOnTxTimeoutIrq
-RadioOnDioIrq
-RadioIrqProcess
-RadioSleep
-DIO1 add event
-OnTxData
-
-###### =========== MLME-Confirm ============ ######
-STATUS      : Tx timeout
-OnJoinRequest
-TODO: RtcGetCalendarTime
-TODO: RtcBkupRead
-TODO: RtcBkupRead
-RadioSetChannel: freq=923400000
-RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
-RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-RadioStandby
-RadioSetModem
-SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
-SecureElementRandomNumber: 0x3edc3816
-RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b 16 38 e5 d8 6b cf 
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
-
-###### =========== MLME-Request ============ ######
-######               MLME_JOIN               ######
-###### ===================================== ######
-STATUS      : OK
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-DIO1 add event
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x420179fc
-callout_handler: lock
-handle_event_queue: ev=0x420179fc
-RadioOnTxTimeoutIrq
-RadioOnDioIrq
-RadioIrqProcess
-RadioSleep
-DIO1 add event
-OnTxData
-
-###### =========== MLME-Confirm ============ ######
-STATUS      : Tx timeout
-OnJoinRequest
-TODO: RtcGetCalendarTime
-TODO: RtcBkupRead
-TODO: RtcBkupRead
-RadioSetChannel: freq=923400000
-RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
-RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-RadioStandby
-RadioSetModem
-SX126xSetTxParams: power=13, rampTime=7
-SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1 
-SecureElementRandomNumber: 0x9ad3ceef
-RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b ef ce 17 23 5e c1 
-RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
-
-###### =========== MLME-Request ============ ######
-######               MLME_JOIN               ######
-###### ===================================== ######
-STATUS      : OK
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
-DIO1 add event
-handle_event_queue: ev=0x42015ab8
-RadioOnDioIrq
-RadioIrqProcess
-RadioOnDioIrq
-RadioIrqProcess
+UplinkProcess
 
 ----- TODO: Record the BL602 Output for Crash Analysis
 root@raspberrypi:/home/pi/remote-bl602#
