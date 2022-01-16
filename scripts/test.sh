@@ -100,9 +100,13 @@ echo 0 >/sys/class/gpio/gpio3/value
 sleep 1
 echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
-sleep 10
 
-echo "----- Send command to BL602"
+##  Wait a while for BL602 to finish booting
+sleep 10
+echo
+
+echo "----- Send command to BL602: lorawan_test"
+sleep 5
 echo "lorawan_test" >/dev/ttyUSB0
 sleep 30
 
