@@ -103,10 +103,10 @@ sleep 1
 
 echo "----- Send command to BL602"
 echo "lorawan_test" >/dev/ttyUSB0
+sleep 10
 
 echo
 echo "----- TODO: Record the BL602 Output for Crash Analysis"
-sleep 5
 kill %1
 
 ##  We don't disable GPIO 2 and 3 because otherwise BL602 might keep rebooting
