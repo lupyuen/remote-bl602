@@ -102,8 +102,9 @@ echo 1 >/sys/class/gpio/gpio3/value
 sleep 1
 
 echo "----- Send command to BL602"
-echo "lorawan_test" >/dev/ttyUSB0
 sleep 10
+echo "lorawan_test" >/dev/ttyUSB0
+sleep 30
 
 echo
 echo "----- TODO: Record the BL602 Output for Crash Analysis"
