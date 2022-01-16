@@ -4,6 +4,8 @@
 
 This script runs on a Linux Single-Board Computer (SBC) to automagically Flash and Test BL602, with the Latest Daily Build of Apache NuttX OS.
 
+The script sends the "`lorawan_test`" command to BL602 after booting, to test the LoRaWAN Stack.
+
 See [scripts/test.sh](scripts/test.sh)
 
 NuttX Daily Builds are done by GitHub Actions. [(See this)](https://github.com/lupyuen/incubator-nuttx/blob/master/.github/workflows/bl602.yml)
@@ -11,6 +13,8 @@ NuttX Daily Builds are done by GitHub Actions. [(See this)](https://github.com/l
 Why are we doing this?
 
 1.  Could be useful for Release Testing of NuttX OS on real hardware
+
+1.  By testing the LoRaWAN Stack on BL602, we can be sure that GPIO Input / Output / Interrupts, SPI, Timers and Message Queues are all working
 
 1.  I write articles about NuttX OS. I need to pick the latest stable build of NuttX OS for testing the NuttX code in my articles. [(See this)](https://lupyuen.github.io/articles/book#nuttx-on-bl602)
 
