@@ -15,13 +15,18 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
+##  Default Build Prefix is "upstream"
+if [ "$BUILD_PREFIX" == '' ]; then
+    export BUILD_PREFIX=upstream
+fi
+
 ##  Add Rust to the PATH
 source $HOME/.cargo/env
 
 set +x  ##  Disable echo
-echo "----- Download the latest Upstream NuttX Release"
+echo "----- Download the latest $BUILD_PREFIX NuttX build"
 set -x  ##  Enable echo
-wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/upstream-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
+wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/$(BUILD_PREFIX)-$(date +'%Y-%m-%d')/nuttx.zip -O /tmp/nuttx.zip
 pushd /tmp
 unzip -o nuttx.zip
 popd
