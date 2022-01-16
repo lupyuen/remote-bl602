@@ -14,7 +14,7 @@ Why are we doing this?
 
 1.  Could be useful for Release Testing of NuttX OS on real hardware
 
-1.  By testing the LoRaWAN Stack on BL602, we can be sure that GPIO Input / Output / Interrupts, SPI, Timers, Message Queues and PThreads are all working
+1.  By testing the LoRaWAN Stack on NuttX, we can be sure that GPIO Input / Output / Interrupts, SPI, Timers, Message Queues, PThreads and Strong Random Number Generator are all working
 
 1.  I write articles about NuttX OS. I need to pick the latest stable build of NuttX OS for testing the NuttX code in my articles. [(See this)](https://lupyuen.github.io/articles/book#nuttx-on-bl602)
 
