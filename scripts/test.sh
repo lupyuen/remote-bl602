@@ -96,7 +96,9 @@ echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 sleep 10
 
 ##  Check whether BL602 has crashed
+set +e  ##  Don't exit when any command fails
 match=$(grep "registerdump" /tmp/test.log)
+set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, Send the test command to BL602
@@ -107,9 +109,13 @@ if [ "$match" == "" ]; then
     sleep 30
 
     ##  Check whether BL602 has joined the LoRaWAN Network
+    set +e  ##  Don't exit when any command fails
     match=$(grep "JOINED" /tmp/test.log)
+    set -e  ##  Exit when any command fails
+
+    ##  If BL602 has joined the LoRaWAN Network, then everything is super hunky dory!
     if [ "$match" != "" ]; then
-        echo; echo "----- All OK! BL602 has successfully joined the LoRaWAN Network!"
+        echo; echo "----- All OK! BL602 has successfully joined the LoRaWAN Network"
     fi
 
 else
@@ -120,7 +126,7 @@ else
     set +e
 
     ##  Find all code addresses 23?????? in the Output Log, remove duplicates, skip 23007000.
-    ##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
+    ##  Returns a newline-delimited list of addresses: "23011000\n230053a0\n..."
     grep --extended-regexp \
         --only-matching \
         "23[0-9a-f]{6}" \
@@ -141,7 +147,7 @@ else
     done
 
     ##  Find all data addresses 42?????? in the Output Log, remove duplicates.
-    ##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
+    ##  Returns a newline-delimited list of addresses: "23011000\n230053a0\n..."
     grep --extended-regexp \
         --only-matching \
         "42[0-9a-f]{6}" \
@@ -159,6 +165,9 @@ else
             echo
         fi
     done
+
+    ##  Exit when any command fails
+    set -e
 fi
 
 ##  Kill the background task that captures the BL602 output

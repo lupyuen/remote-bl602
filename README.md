@@ -6,6 +6,8 @@ This script runs on a Linux Single-Board Computer (SBC) to automagically Flash a
 
 The script sends the "`lorawan_test`" command to BL602 after booting, to test the LoRaWAN Stack.
 
+If BL602 crashes, the script runs a Crash Analysis to show the RISC-V Disassembly of the addresses in the Stack Trace.
+
 See [scripts/test.sh](scripts/test.sh)
 
 NuttX Daily Builds are done by GitHub Actions...
@@ -113,21 +115,19 @@ Archive:  nuttx.zip
 + blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 [INFO  blflash::flasher] Start connection...
 [TRACE blflash::flasher] 5ms send count 55
-[TRACE blflash::flasher] handshake sent elapsed 277.925µs
+[TRACE blflash::flasher] handshake sent elapsed 233.442µs
 [INFO  blflash::flasher] Connection Succeed
 [INFO  blflash] Bootrom version: 1
 [TRACE blflash] Boot info: BootInfo { len: 14, bootrom_version: 1, otp_info: [0, 0, 0, 0, 3, 0, 0, 0, 61, 9d, c0, 5, b9, 18, 1d, 0] }
 [INFO  blflash::flasher] Sending eflash_loader...
-[INFO  blflash::flasher] Finished 2.559564146s 11.17KiB/s
+[INFO  blflash::flasher] Finished 2.551582797s 11.20KiB/s
 [TRACE blflash::flasher] 5ms send count 500
-[TRACE blflash::flasher] handshake sent elapsed 5.227105ms
+[TRACE blflash::flasher] handshake sent elapsed 5.459475ms
 [INFO  blflash::flasher] Entered eflash_loader
 [INFO  blflash::flasher] Skip segment addr: 0 size: 47504 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: e000 size: 272 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: f000 size: 272 sha256 matches
-[INFO  blflash::flasher] Erase flash addr: 10000 size: 85056
-[INFO  blflash::flasher] Program flash... 1a406e1565a7c484e086d52642fea4ac58183218f238455ed091cb1a2a4aeb1b
-[INFO  blflash::flasher] Program done 1.019176383s 81.51KiB/s
+[INFO  blflash::flasher] Skip segment addr: 10000 size: 85056 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: 1f8000 size: 5671 sha256 matches
 [INFO  blflash] Success
 + set +x
@@ -143,12 +143,12 @@ up_assert: Assertion failed at file:irq/irq_unexpectedisr.c line: 51 task: Idle 
 riscv_registerdump: EPC: deadbeee
 riscv_registerdump: A0: 00000002 A1: 420146b0 A2: 42015140 A3: 4201481c
 riscv_registerdump: A4: 420150d0 A5: 00000000 A6: 00000002 A7: 00000000
-riscv_registerdump: T0: 00006000 T1: 00000003 T2: 41bd5688 T3: 00000064
+riscv_registerdump: T0: 00006000 T1: 00000003 T2: 41bd5488 T3: 00000064
 riscv_registerdump: T4: 00000000 T5: 00000000 T6: c48af7e4
 riscv_registerdump: S0: deadbeef S1: deadbeef S2: 420146b0 S3: 42014000
 riscv_registerdump: S4: 42015000 S5: 42012510 S6: 00000001 S7: 23007000
 riscv_registerdump: S8: 4201fa38 S9: 00000001 S10: 00000c40 S11: 42010510
-riscv_registerdump: SP: 420126b0 FP: deadbeef TP: 005812e5 RA: deadbeef
+riscv_registerdump: SP: 420126b0 FP: deadbeef TP: 005952e5 RA: deadbeef
 riscv_dumpstate: sp:     420144b0
 riscv_dumpstate: IRQ stack:
 riscv_dumpstate:   base: 42012540
@@ -163,13 +163,119 @@ riscv_dumpstate: User stack:
 riscv_dumpstate:   base: 42010530
 riscv_dumpstate:   size: 00001fe0
 riscv_showtasks:    PID    PRI      USED     STACK   FILLED    COMMAND
-riscv_showtasks:   ----   ----      8088      8192    98.7%!  irq
-riscv_dump_task:      0     0       436      8160     5.3%    Idle Task
+riscv_showtasks:   ----   ----      8088      8192    98.7%!   irq
+riscv_dump_task:      0      0       436      8160     5.3%    Idle Task
 riscv_dump_task:      1    100       516      8144     6.3%    nsh_main
 
------ Send command to BL602: lorawan_test
+----- Crash Analysis
 
------ TODO: Record the BL602 Output for Crash Analysis
+----- Address 230053a0
+23005396:       854e                    mv      a0,s3
+23005398:       00000097                auipc   ra,0x0
+2300539c:       c8c080e7                jalr    -884(ra) # 23005024 <riscv_stackdump>
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_assert.c:364
+      if (CURRENT_REGS)
+230053a0:       7f0a2783                lw      a5,2032(s4)
+230053a4:       c399                    beqz    a5,230053aa <up_assert+0x274>
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_assert.c:366
+          sp = CURRENT_REGS[REG_SP];
+230053a6:       0087a983                lw      s3,8(a5)
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_assert.c:369
+
+----- Address 230042e2
+  up_assert(filename, linenum);
+230042da:       00001097                auipc   ra,0x1
+230042de:       e5c080e7                jalr    -420(ra) # 23005136 <up_assert>
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/libs/libc/assert/lib_assert.c:37
+  exit(EXIT_FAILURE);
+230042e2:       4505                    li      a0,1
+230042e4:       ffffe097                auipc   ra,0xffffe
+230042e8:       138080e7                jalr    312(ra) # 2300241c <exit>
+
+230042ec <__errno>:
+__errno():
+
+----- Address 23001d3e
+
+#else /* CONFIG_SMP */
+
+int sched_lock(void)
+{
+23001d3e:       1141                    addi    sp,sp,-16
+23001d40:       c422                    sw      s0,8(sp)
+23001d42:       c226                    sw      s1,4(sp)
+23001d44:       c606                    sw      ra,12(sp)
+23001d46:       0800                    addi    s0,sp,16
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/sched/sched/sched_lock.c:228
+
+----- Address 23001cdc
+  /* Record the new "running" task.  g_running_tasks[] is only used by
+   * assertion logic for reporting crashes.
+   */
+
+  g_running_tasks[this_cpu()] = this_task();
+23001cdc:       420147b7                lui     a5,0x42014
+23001ce0:       7fc7a703                lw      a4,2044(a5) # 420147fc <g_readytorun>
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/sched/irq/irq_dispatch.c:201
+}
+23001ce4:       40b2                    lw      ra,12(sp)
+23001ce6:       4422                    lw      s0,8(sp)
+
+----- Address 23000db4
+   * point state and the establish the correct address environment before
+   * returning from the interrupt.
+   */
+
+  if (regs != CURRENT_REGS)
+23000db4:       7f04a503                lw      a0,2032(s1)
+23000db8:       01250663                beq     a0,s2,23000dc4 <riscv_dispatch_irq+0x70>
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/chip/bl602_irq_dispatch.c:106
+    {
+#ifdef CONFIG_ARCH_FPU
+      /* Restore floating point registers */
+
+----- Address 23000d04
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_exception_common.S:120
+
+  /* If context switch is needed, return a new sp     */
+
+  mv         sp, a0
+23000d04:       812a                    mv      sp,a0
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_exception_common.S:121
+  REGLOAD    s0, REG_EPC(sp)     /* restore mepc      */
+23000d06:       4402                    lw      s0,0(sp)
+/home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_exception_common.S:122
+  csrw       mepc, s0
+
+----- Address 4201481c
+4201481c g     O .bss   00000008 g_pendingtasks
+
+----- Address 42012510
+42012510 l    d  .bss   00000000 .bss
+42012510 l     O .bss   00000008 g_idleargv
+42012510 g       .bss   00000000 __bss_start
+
+----- Address 42010510
+42010510 l    d  .noinit        00000000 .noinit
+42010510 g       .data  00000000 __boot2_pt_addr_end
+42010510 g     O .noinit        00002000 g_idle_stack
+42010510 g       .data  00000000 _data_run_end
+42010510 g       .data  00000000 __boot2_pt_addr_start
+42010510 g       .data  00000000 __boot2_flash_cfg_start
+42010510 g       .data  00000000 __boot2_flash_cfg_end
+
+----- Address 42012540
+42012540 g     O .bss   00002000 g_intstackalloc
+
+----- Address 42012510
+42012510 l    d  .bss   00000000 .bss
+42012510 l     O .bss   00000008 g_idleargv
+42012510 g       .bss   00000000 __bss_start
+
+----- Address 42014540
+42014540 l     O .bss   00000080 g_uart0rxbuffer
+42014540 g     O .bss   00000000 g_intstacktop
+
 pi@raspberrypi:~/remote-bl602 $
 ```
 
