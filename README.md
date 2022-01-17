@@ -32,6 +32,7 @@ Connect SBC to to BL602 like so...
 | -------|----------|----------
 | GPIO 2 | GPIO 8   | Flashing Mode
 | GPIO 3 | GPIO RST | Reset
+| GND    | GND      | Ground
 
 For auto-testing LoRaWAN, also connect BL602 to SX1262 as described below...
 
@@ -294,8 +295,8 @@ root@raspberrypi:/home/pi/remote-bl602# export BUILD_PREFIX=release; ./scripts/t
 + source /root/.cargo/env
 ++ case ":${PATH}:" in
 + set +x
------ Download the latest release NuttX build for 2022-01-16
-+ wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/release-2022-01-16/nuttx.zip -O /tmp/nuttx.zip
+----- Download the latest release NuttX build for 2022-01-17
++ wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/release-2022-01-17/nuttx.zip -O /tmp/nuttx.zip
 + pushd /tmp
 /tmp /home/pi/remote-bl602
 + unzip -o nuttx.zip
@@ -321,19 +322,19 @@ Archive:  nuttx.zip
 + blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 [INFO  blflash::flasher] Start connection...
 [TRACE blflash::flasher] 5ms send count 55
-[TRACE blflash::flasher] handshake sent elapsed 302.868µs
+[TRACE blflash::flasher] handshake sent elapsed 270.388µs
 [INFO  blflash::flasher] Connection Succeed
 [INFO  blflash] Bootrom version: 1
 [TRACE blflash] Boot info: BootInfo { len: 14, bootrom_version: 1, otp_info: [0, 0, 0, 0, 3, 0, 0, 0, 61, 9d, c0, 5, b9, 18, 1d, 0] }
 [INFO  blflash::flasher] Sending eflash_loader...
-[INFO  blflash::flasher] Finished 2.559899883s 11.17KiB/s
+[INFO  blflash::flasher] Finished 2.575279962s 11.10KiB/s
 [TRACE blflash::flasher] 5ms send count 500
-[TRACE blflash::flasher] handshake sent elapsed 5.19733ms
+[TRACE blflash::flasher] handshake sent elapsed 5.2155ms
 [INFO  blflash::flasher] Entered eflash_loader
 [INFO  blflash::flasher] Skip segment addr: 0 size: 47504 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: e000 size: 272 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: f000 size: 272 sha256 matches
-[INFO  blflash::flasher] Skip segment addr: 10000 size: 379200 sha256 matches
+[INFO  blflash::flasher] Skip segment addr: 10000 size: 379216 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: 1f8000 size: 5671 sha256 matches
 [INFO  blflash] Success
 + set +x
@@ -413,9 +414,9 @@ RadioStandby
 RadioSetModem
 SX126xSetTxParams: power=13, rampTime=7
 SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
-SecureElementRandomNumber: 0x13e7c3db
+SecureElementRandomNumber: 0xf49ca09d
 RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b db c3 9c ac 19 29
+00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b 9d a0 1a b3 de 09
 RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
 TimerStop:     0x420179fc
 TimerStart2:   0x420179fc, 4000 ms
@@ -520,7 +521,7 @@ OnJoinRequest
 
 OTAA
 
-DevAddr     :  004E60A6
+DevAddr     :  000978EE
 
 
 DATA RATE   : DR_2
@@ -537,7 +538,7 @@ PrepareTxFrame: status=0, maxSize=11, currentSize=11
 LmHandlerSend: Data frame
 TODO: RtcGetCalendarTime
 TODO: RtcBkupRead
-RadioSetChannel: freq=923200000
+RadioSetChannel: freq=923400000
 RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=9, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
 RadioSetTxConfig: SpreadingFactor=9, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=128, CrcMode=1, InvertIQ=0
 RadioStandby
@@ -545,7 +546,7 @@ RadioSetModem
 SX126xSetTxParams: power=13, rampTime=7
 SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
 RadioSend: size=22
-40 a6 60 4e 00 00 01 00 01 fe 4f b0 c0 4a 0f bd c5 15 c0 f5 74 d8
+40 ee 78 09 00 00 01 00 01 e0 5b b6 22 22 62 59 0d d4 6b ff cd 0e
 RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=22, CrcMode=1, InvertIQ=0
 TimerStop:     0x420179fc
 TimerStart2:   0x420179fc, 4000 ms
@@ -595,7 +596,7 @@ callout_handler: lock
 handle_event_queue: ev=0x42016848
 TimerStop:     0x42016848
 RadioStandby
-RadioSetChannel: freq=923200000
+RadioSetChannel: freq=923400000
 RadioSetRxConfig
 RadioStandby
 RadioSetModem
@@ -632,7 +633,7 @@ TX DATA     : UNCONFIRMED
 48 69 20 4E 75 74 74 58 00
 
 DATA RATE   : DR_3
-U/L FREQ    : 923200000
+U/L FREQ    : 923400000
 TX POWER    : 0
 CHANNEL MASK: 0003
 
@@ -646,6 +647,6 @@ RadioOnDioIrq
 RadioIrqProcess
 UplinkProcess
 
------ TODO: Record the BL602 Output for Crash Analysis
+----- All OK! BL602 has successfully joined the LoRaWAN Network
 root@raspberrypi:/home/pi/remote-bl602#
 ```

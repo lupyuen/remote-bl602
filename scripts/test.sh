@@ -9,6 +9,7 @@
 ## | -------|----------|----------
 ## | GPIO 2 | GPIO 8   | Flashing Mode
 ## | GPIO 3 | GPIO RST | Reset
+## | GND    | GND      | Ground
 ## Remember to install blflash as superuser: sudo cargo install blflash
 ## Based on https://www.ics.com/blog/gpio-programming-using-sysfs-interface
 
