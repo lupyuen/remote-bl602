@@ -98,7 +98,7 @@ sleep 10
 ##  Check whether BL602 has crashed
 match=$(grep "registerdump" /tmp/test.log)
 
-if [ "$match" != "" ]; then
+if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, Send the test command to BL602
     echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 5
     echo "lorawan_test" >/dev/ttyUSB0
