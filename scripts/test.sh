@@ -106,6 +106,12 @@ if [ "$match" == "" ]; then
     ##  Wait a while for the test command to run
     sleep 30
 
+    ##  Check whether BL602 has joined the LoRaWAN Network
+    match=$(grep "JOINED" /tmp/test.log)
+    if [ "$match" != "" ]; then
+        echo; echo "----- All OK! BL602 has successfully joined the LoRaWAN Network!"
+    fi
+
 else
     ##  If BL602 has crashed, do the Crash Analysis
     echo; echo "----- Crash Analysis"; echo
