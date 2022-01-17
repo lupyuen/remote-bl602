@@ -108,6 +108,8 @@ kill %1
 
 echo; echo "----- Crash Analysis"; echo
 
+set -x  ##  Enable echo
+
 ##  Find all code addresses 23?????? in the Output Log, remove duplicates, skip 23007000.
 ##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
 grep --extended-regexp \
