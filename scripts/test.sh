@@ -101,7 +101,7 @@ match=$(grep "registerdump" /tmp/test.log)
 set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
-    ##  If BL602 has not crashed, Send the test command to BL602
+    ##  If BL602 has not crashed, send the test command to BL602
     echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 5
     echo "lorawan_test" >/dev/ttyUSB0
 
