@@ -167,7 +167,8 @@ else
         if [ "$match" != "" ]; then
             echo "----- Data Address $addr"
             grep \
-                --color=auto "^$addr" \
+                --color=auto \
+                "^$addr" \
                 /tmp/nuttx.S \
                 | grep -v "noinit"
             echo
