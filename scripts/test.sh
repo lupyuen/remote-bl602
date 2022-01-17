@@ -93,7 +93,7 @@ echo 0 >/sys/class/gpio/gpio3/value ; sleep 1
 echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 
 ##  Wait a while for BL602 to finish booting
-sleep 10
+sleep 5
 
 ##  Check whether BL602 has crashed
 set +e  ##  Don't exit when any command fails
