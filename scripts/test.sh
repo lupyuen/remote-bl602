@@ -123,8 +123,6 @@ else
     ##  If BL602 has crashed, do the Crash Analysis
     echo; echo "----- Crash Analysis"; echo
 
-    sleep 10 ####
-
     ##  Don't exit when any command fails (grep)
     set +e
 
@@ -152,8 +150,6 @@ else
             echo
         fi
     done
-    
-    sleep 10 ####
 
     ##  Find all data addresses 42?????? in the Output Log, remove duplicates.
     ##  Returns a newline-delimited list of addresses: "23011000\n230053a0\n..."
