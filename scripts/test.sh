@@ -110,7 +110,8 @@ else
     ##  If BL602 has crashed, do the Crash Analysis
     echo; echo "----- Crash Analysis"; echo
 
-    set +e  ##  Don't exit when any command fails
+    ##  Don't exit when any command fails (grep)
+    set +e
 
     ##  Find all code addresses 23?????? in the Output Log, remove duplicates, skip 23007000.
     ##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
