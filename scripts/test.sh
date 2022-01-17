@@ -93,7 +93,7 @@ echo 0 >/sys/class/gpio/gpio3/value ; sleep 1
 echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 
 ##  Wait a while for BL602 to finish booting
-sleep 5
+sleep 1
 
 ##  Check whether BL602 has crashed
 set +e  ##  Don't exit when any command fails
@@ -102,7 +102,7 @@ set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, send the test command to BL602
-    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 5
+    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 1
     echo "lorawan_test" >/dev/ttyUSB0
 
     ##  Wait a while for the test command to run
