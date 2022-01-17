@@ -170,7 +170,7 @@ riscv_dump_task:      1    100       516      8144     6.3%    nsh_main
 
 ----- Crash Analysis
 
------ Address 230053a0
+----- Code Address 230053a0
 23005396:       854e                    mv      a0,s3
 23005398:       00000097                auipc   ra,0x0
 2300539c:       c8c080e7                jalr    -884(ra) # 23005024 <riscv_stackdump>
@@ -196,7 +196,7 @@ riscv_dump_task:      1    100       516      8144     6.3%    nsh_main
 230042ec <__errno>:
 __errno():
 
------ Address 23001d3e
+----- Code Address 23001d3e
 
 #else /* CONFIG_SMP */
 
@@ -209,7 +209,7 @@ int sched_lock(void)
 23001d46:       0800                    addi    s0,sp,16
 /home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/sched/sched/sched_lock.c:228
 
------ Address 23001cdc
+----- Code Address 23001cdc
   /* Record the new "running" task.  g_running_tasks[] is only used by
    * assertion logic for reporting crashes.
    */
@@ -222,7 +222,7 @@ int sched_lock(void)
 23001ce4:       40b2                    lw      ra,12(sp)
 23001ce6:       4422                    lw      s0,8(sp)
 
------ Address 23000db4
+----- Code Address 23000db4
    * point state and the establish the correct address environment before
    * returning from the interrupt.
    */
@@ -235,7 +235,7 @@ int sched_lock(void)
 #ifdef CONFIG_ARCH_FPU
       /* Restore floating point registers */
 
------ Address 23000d04
+----- Code Address 23000d04
 /home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_exception_common.S:120
 
   /* If context switch is needed, return a new sp     */
@@ -248,15 +248,15 @@ int sched_lock(void)
 /home/runner/work/incubator-nuttx/incubator-nuttx/nuttx/nuttx/arch/risc-v/src/common/riscv_exception_common.S:122
   csrw       mepc, s0
 
------ Address 4201481c
+----- Data Address 4201481c
 4201481c g     O .bss   00000008 g_pendingtasks
 
------ Address 42012510
+----- Data Address 42012510
 42012510 l    d  .bss   00000000 .bss
 42012510 l     O .bss   00000008 g_idleargv
 42012510 g       .bss   00000000 __bss_start
 
------ Address 42010510
+----- Data Address 42010510
 42010510 l    d  .noinit        00000000 .noinit
 42010510 g       .data  00000000 __boot2_pt_addr_end
 42010510 g     O .noinit        00002000 g_idle_stack
@@ -265,15 +265,15 @@ int sched_lock(void)
 42010510 g       .data  00000000 __boot2_flash_cfg_start
 42010510 g       .data  00000000 __boot2_flash_cfg_end
 
------ Address 42012540
+----- Data Address 42012540
 42012540 g     O .bss   00002000 g_intstackalloc
 
------ Address 42012510
+----- Data Address 42012510
 42012510 l    d  .bss   00000000 .bss
 42012510 l     O .bss   00000008 g_idleargv
 42012510 g       .bss   00000000 __bss_start
 
------ Address 42014540
+----- Data Address 42014540
 42014540 l     O .bss   00000080 g_uart0rxbuffer
 42014540 g     O .bss   00000000 g_intstacktop
 

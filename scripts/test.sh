@@ -141,8 +141,12 @@ else
         ##  Skip addresses that don't match
         match=$(grep "$addr:" /tmp/nuttx.S)
         if [ "$match" != "" ]; then
-            echo "----- Address $addr"
-            grep --context=5 --color=auto "$addr:" /tmp/nuttx.S
+            echo "----- Code Address $addr"
+            grep \
+                --context=5 \
+                --color=auto \
+                "$addr:" \
+                /tmp/nuttx.S
             echo
         fi
     done
@@ -161,8 +165,11 @@ else
         ##  Skip addresses that don't match
         match=$(grep "^$addr" /tmp/nuttx.S)
         if [ "$match" != "" ]; then
-            echo "----- Address $addr"
-            grep --color=auto "^$addr" /tmp/nuttx.S
+            echo "----- Data Address $addr"
+            grep \
+                --color=auto "^$addr" \
+                /tmp/nuttx.S \
+                | grep -v "noinit"
             echo
         fi
     done
