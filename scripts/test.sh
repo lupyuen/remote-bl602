@@ -95,58 +95,66 @@ echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 ##  Wait a while for BL602 to finish booting
 sleep 10
 
-echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 5
-echo "lorawan_test" >/dev/ttyUSB0
+##  Check whether BL602 has crashed
+match=$(grep "registerdump" /tmp/test.log)
 
-##  Wait a while for the command to run
-sleep 30
+if [ "$match" != "" ]; then
+    ##  If BL602 has not crashed, Send the test command to BL602
+    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 5
+    echo "lorawan_test" >/dev/ttyUSB0
+
+    ##  Wait a while for the test command to run
+    sleep 30
+
+else
+    ##  If BL602 has crashed, do the Crash Analysis
+    echo; echo "----- Crash Analysis"; echo
+
+    set +e  ##  Don't exit when any command fails
+
+    ##  Find all code addresses 23?????? in the Output Log, remove duplicates, skip 23007000.
+    ##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
+    grep --extended-regexp \
+        --only-matching \
+        "23[0-9a-f]{6}" \
+        /tmp/test.log \
+        | grep -v "23007000" \
+        | uniq \
+        >/tmp/test.addr
+
+    ##  For every address, show the corresponding line in the disassembly
+    for addr in $(cat /tmp/test.addr); do
+        ##  Skip addresses that don't match
+        match=$(grep "$addr:" /tmp/nuttx.S)
+        if [ "$match" != "" ]; then
+            echo "----- Address $addr"
+            grep --context=5 --color=auto "$addr:" /tmp/nuttx.S
+            echo
+        fi
+    done
+
+    ##  Find all data addresses 42?????? in the Output Log, remove duplicates.
+    ##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
+    grep --extended-regexp \
+        --only-matching \
+        "42[0-9a-f]{6}" \
+        /tmp/test.log \
+        | uniq \
+        >/tmp/test.addr
+
+    ##  For every address, show the corresponding line in the disassembly
+    for addr in $(cat /tmp/test.addr); do
+        ##  Skip addresses that don't match
+        match=$(grep "^$addr" /tmp/nuttx.S)
+        if [ "$match" != "" ]; then
+            echo "----- Address $addr"
+            grep --color=auto "^$addr" /tmp/nuttx.S
+            echo
+        fi
+    done
+fi
 
 ##  Kill the background task that captures the BL602 output
 kill %1
 
 ##  We don't disable GPIO 2 and 3 because otherwise BL602 might keep rebooting
-
-echo; echo "----- Crash Analysis"; echo
-
-set -x  ##  Enable echo
-
-##  Find all code addresses 23?????? in the Output Log, remove duplicates, skip 23007000.
-##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
-grep --extended-regexp \
-    --only-matching \
-    "23[0-9a-f]{6}" \
-    /tmp/test.log \
-    | grep -v "23007000" \
-    | uniq \
-    >/tmp/test.addr
-
-##  For every address, show the corresponding line in the disassembly
-for addr in $(cat /tmp/test.addr); do
-    ##  Skip addresses that don't match
-    match=$(grep "$addr:" /tmp/nuttx.S)
-    if [ "$match" != "" ]; then
-        echo "----- Address $addr"
-        grep --context=5 --color=auto "$addr:" /tmp/nuttx.S
-        echo
-    fi
-done
-
-##  Find all data addresses 42?????? in the Output Log, remove duplicates.
-##  Returns a newline-delimited list of addresses: "23007000\n23011000\n230053a0..."
-grep --extended-regexp \
-    --only-matching \
-    "42[0-9a-f]{6}" \
-    /tmp/test.log \
-    | uniq \
-    >/tmp/test.addr
-
-##  For every address, show the corresponding line in the disassembly
-for addr in $(cat /tmp/test.addr); do
-    ##  Skip addresses that don't match
-    match=$(grep "^$addr" /tmp/nuttx.S)
-    if [ "$match" != "" ]; then
-        echo "----- Address $addr"
-        grep --color=auto "^$addr" /tmp/nuttx.S
-        echo
-    fi
-done
