@@ -72,6 +72,12 @@ export BUILD_PREFIX=release
 
 (See the output log below)
 
+We may now flash and test BL602 remotely over SSH...
+
+```bash
+ssh my-sbc sudo remote-bl602/scripts/test.sh
+```
+
 # Output Log for Upstream Build
 
 Below is the log for the __Daily Upstream Build__ (without the LoRaWAN Stack)...
