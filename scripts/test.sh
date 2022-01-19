@@ -197,3 +197,7 @@ kill %1
 
 ##  We don't disable GPIO 2 and 3 because otherwise BL602 might keep rebooting
 echo
+
+##  TODO: Capture the script output and write it to the Body of the GitHub Release
+##  script -c "sudo remote-bl602/scripts/test.sh" /tmp/test.script
+##  See https://docs.github.com/en/rest/reference/releases#update-a-release
