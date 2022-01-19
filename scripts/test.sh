@@ -183,3 +183,4 @@ fi
 kill %1
 
 ##  We don't disable GPIO 2 and 3 because otherwise BL602 might keep rebooting
+echo
