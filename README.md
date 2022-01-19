@@ -1,6 +1,8 @@
 # Flash and Test BL602 Remotely via a Linux Single-Board Computer
 
-[(Follow the updates on Twitter)](https://twitter.com/MisterTechBlog/status/1481794711744823296)
+Read the article...
+
+-   ["Auto Flash and Test NuttX on RISC-V BL602"](https://lupyuen.github.io/articles/auto)
 
 This script runs on a Linux Single-Board Computer (SBC) to automagically Flash and Test BL602, with the Latest Daily Build of Apache NuttX OS.
 
@@ -8,21 +10,25 @@ The script sends the "`lorawan_test`" command to BL602 after booting, to test th
 
 If BL602 crashes, the script runs a Crash Analysis to show the RISC-V Disassembly of the addresses in the Stack Trace.
 
-See [scripts/test.sh](scripts/test.sh)
+The script is here...
 
-NuttX Daily Builds are done by GitHub Actions...
+-   [scripts/test.sh](scripts/test.sh)
+
+NuttX Builds are done by GitHub Actions...
 
 -  [Daily Upstream Build](https://github.com/lupyuen/incubator-nuttx/blob/master/.github/workflows/bl602.yml) (Without the LoRaWAN Stack)
 
 -  [Release Build](https://github.com/lupyuen/incubator-nuttx/blob/master/.github/workflows/bl602-commit.yml) (Includes the LoRaWAN Stack)
 
+-  [Downstream Build](https://github.com/lupyuen/incubator-nuttx/blob/master/.github/workflows/bl602-downstream.yml) (Merges the LoRaWAN Stack with upstream updates)
+
 Why are we doing this?
 
-1.  Could be useful for Release Testing of NuttX OS on real hardware
+-   Might be useful for __Release Testing__ of NuttX (and other operating systems) on real hardware
 
-1.  By testing the LoRaWAN Stack on NuttX, we can be sure that GPIO Input / Output / Interrupts, SPI, Timers, Message Queues, PThreads and Strong Random Number Generator are all working
+-   By auto-testing the __LoRaWAN Stack__ on NuttX, we can be sure that GPIO Input / Output / Interrupts, SPI, ADC, Timers, Message Queues, PThreads, Strong Random Number Generator and Internal Temperature Sensor are all working OK with the latest Daily Build of NuttX
 
-1.  I write articles about NuttX OS. I need to pick the latest stable build of NuttX OS for testing the NuttX code in my articles. [(See this)](https://lupyuen.github.io/articles/book#nuttx-on-bl602)
+-   I write articles about NuttX OS. I need to pick the __Latest Stable Build__ of NuttX for testing the NuttX code in my articles. [(Like these)](https://lupyuen.github.io/articles/book#nuttx-on-bl602)
 
 # Run The Script
 
@@ -291,18 +297,20 @@ pi@raspberrypi:~/remote-bl602 $
 Below is the log for the __Release Build__ (includes the LoRaWAN Stack)...
 
 ```text
-pi@raspberrypi:~/remote-bl602 $ sudo bash
-root@raspberrypi:/home/pi/remote-bl602# export BUILD_PREFIX=release; ./scripts/test.sh
+pi@raspberrypi:~ $ sudo bash
+root@raspberrypi:/home/pi# export BUILD_PREFIX=release; cd /home/pi/remote-bl602 && git pull && ./s
+cripts/test.sh
+Already up to date.
 + '[' release == '' ']'
 + '[' '' == '' ']'
 ++ date +%Y-%m-%d
-+ export BUILD_DATE=2022-01-16
-+ BUILD_DATE=2022-01-16
++ export BUILD_DATE=2022-01-19
++ BUILD_DATE=2022-01-19
 + source /root/.cargo/env
 ++ case ":${PATH}:" in
 + set +x
------ Download the latest release NuttX build for 2022-01-17
-+ wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/release-2022-01-17/nuttx.zip -O /tmp/nuttx.zip
+----- Download the latest release NuttX build for 2022-01-19
++ wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/release-2022-01-19/nuttx.zip -O /tmp/nuttx.zip
 + pushd /tmp
 /tmp /home/pi/remote-bl602
 + unzip -o nuttx.zip
@@ -328,19 +336,21 @@ Archive:  nuttx.zip
 + blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 [INFO  blflash::flasher] Start connection...
 [TRACE blflash::flasher] 5ms send count 55
-[TRACE blflash::flasher] handshake sent elapsed 270.388µs
+[TRACE blflash::flasher] handshake sent elapsed 417.515µs
 [INFO  blflash::flasher] Connection Succeed
 [INFO  blflash] Bootrom version: 1
 [TRACE blflash] Boot info: BootInfo { len: 14, bootrom_version: 1, otp_info: [0, 0, 0, 0, 3, 0, 0, 0, 61, 9d, c0, 5, b9, 18, 1d, 0] }
 [INFO  blflash::flasher] Sending eflash_loader...
-[INFO  blflash::flasher] Finished 2.575279962s 11.10KiB/s
+[INFO  blflash::flasher] Finished 2.552378464s 11.20KiB/s
 [TRACE blflash::flasher] 5ms send count 500
-[TRACE blflash::flasher] handshake sent elapsed 5.2155ms
+[TRACE blflash::flasher] handshake sent elapsed 5.172344ms
 [INFO  blflash::flasher] Entered eflash_loader
 [INFO  blflash::flasher] Skip segment addr: 0 size: 47504 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: e000 size: 272 sha256 matches
 [INFO  blflash::flasher] Skip segment addr: f000 size: 272 sha256 matches
-[INFO  blflash::flasher] Skip segment addr: 10000 size: 379216 sha256 matches
+[INFO  blflash::flasher] Erase flash addr: 10000 size: 369168
+[INFO  blflash::flasher] Program flash... 6dff9c29e6ae4d85679184385f45d1afe84943b4481ecfaceeefa70da8e4b585
+[INFO  blflash::flasher] Program done 4.389793166s 82.14KiB/s
 [INFO  blflash::flasher] Skip segment addr: 1f8000 size: 5671 sha256 matches
 [INFO  blflash] Success
 + set +x
@@ -354,6 +364,15 @@ NuttShell (NSH) NuttX-10.2.0-RC0
 nsh>
 ----- Send command to BL602: lorawan_test
 lorawan_test
+init_entropy_pool
+offset = 2202
+temperature = 33.922352 Celsius
+offset = 2202
+temperature = 30.568811 Celsius
+offset = 2202
+temperature = 33.019478 Celsius
+offset = 2202
+temperature = 30.955759 Celsius
 
 ###### ===================================== ######
 
@@ -364,15 +383,15 @@ GitHub base version: 5.0.0
 ###### ===================================== ######
 
 init_event_queue
-TimerInit:     0x4201682c
+TimerInit:     0x4201680c
 callout_handler: lock
-TimerInit:     0x42016848
-TimerInit:     0x42016864
-TimerInit:     0x420168c8
-TimerInit:     0x4201695c
-TimerInit:     0x42016978
-TimerInit:     0x42016994
-TimerInit:     0x420169b0
+TimerInit:     0x42016828
+TimerInit:     0x42016844
+TimerInit:     0x420168a8
+TimerInit:     0x4201693c
+TimerInit:     0x42016958
+TimerInit:     0x42016974
+TimerInit:     0x42016990
 TODO: RtcGetCalendarTime
 TODO: SX126xReset
 init_gpio
@@ -382,12 +401,12 @@ gpio_ioctl: Requested pintype 8, but actual pintype 5
 DIO1 pintype after=5
 Starting process_dio1
 process_dio1 started
-process_dio1: event=0x42015ab8
+process_dio1: event=0x42015a98
 init_spi
 SX126xSetTxParams: power=22, rampTime=7
 SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
-TimerInit:     0x420179fc
-TimerInit:     0x42017b2c
+TimerInit:     0x420179a0
+TimerInit:     0x42017ad0
 RadioSetModem
 RadioSetModem
 RadioSetPublicNetwork: public syncword=3444
@@ -407,9 +426,9 @@ DevEui      : 4B-C1-5E-E7-37-7B-B1-5B
 JoinEui     : 00-00-00-00-00-00-00-00
 Pin         : 00-00-00-00
 
-TimerInit:     0x42016484
-TimerInit:     0x420164a0
-TimerInit:     0x4201645c
+TimerInit:     0x42016464
+TimerInit:     0x42016480
+TimerInit:     0x4201643c
 TODO: RtcGetCalendarTime
 TODO: RtcBkupRead
 TODO: RtcBkupRead
@@ -420,67 +439,67 @@ RadioStandby
 RadioSetModem
 SX126xSetTxParams: power=13, rampTime=7
 SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
-SecureElementRandomNumber: 0xf49ca09d
+SecureElementRandomNumber: 0x0c3e5364
 RadioSend: size=23
-00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b 9d a0 1a b3 de 09
+00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b 64 53 00 9a ca 46
 RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
+TimerStop:     0x420179a0
+TimerStart2:   0x420179a0, 4000 ms
+callout_reset: evq=0x42017aec, ev=0x420179a0
 
 ###### =========== MLME-Request ============ ######
 ######               MLME_JOIN               ######
 ###### ===================================== ######
 STATUS      : OK
 StartTxProcess
-TimerInit:     0x420154c0
-TimerSetValue: 0x420154c0, 42249 ms
+TimerInit:     0x420154a0
+TimerSetValue: 0x420154a0, 42249 ms
 OnTxTimerEvent: timeout in 42249 ms, event=0
-TimerStop:     0x420154c0
-TimerSetValue: 0x420154c0, 42249 ms
-TimerStart:    0x420154c0
-TimerStop:     0x420154c0
-TimerStart2:   0x420154c0, 42249 ms
-callout_reset: evq=0x42017b48, ev=0x420154c0
+TimerStop:     0x420154a0
+TimerSetValue: 0x420154a0, 42249 ms
+TimerStart:    0x420154a0
+TimerStop:     0x420154a0
+TimerStart2:   0x420154a0, 42249 ms
+callout_reset: evq=0x42017aec, ev=0x420154a0
 handle_event_queue
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
 DIO1 add event
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 IRQ_TX_DONE
-TimerStop:     0x420179fc
+TimerStop:     0x420179a0
 TODO: RtcGetCalendarTime
 TODO: RtcBkupRead
 RadioOnDioIrq
 RadioIrqProcess
 RadioSleep
 DIO1 add event
-TimerSetValue: 0x42016848, 4988 ms
-TimerStart:    0x42016848
-TimerStop:     0x42016848
-TimerStart2:   0x42016848, 4988 ms
-callout_reset: evq=0x42017b48, ev=0x42016848
-TimerSetValue: 0x42016864, 5988 ms
-TimerStart:    0x42016864
-TimerStop:     0x42016864
-TimerStart2:   0x42016864, 5988 ms
-callout_reset: evq=0x42017b48, ev=0x42016864
+TimerSetValue: 0x42016828, 4988 ms
+TimerStart:    0x42016828
+TimerStop:     0x42016828
+TimerStart2:   0x42016828, 4988 ms
+callout_reset: evq=0x42017aec, ev=0x42016828
+TimerSetValue: 0x42016844, 5988 ms
+TimerStart:    0x42016844
+TimerStop:     0x42016844
+TimerStart2:   0x42016844, 5988 ms
+callout_reset: evq=0x42017aec, ev=0x42016844
 TODO: RtcGetCalendarTime
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
 callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x42016848
+callout_handler: evq=0x42017aec, ev=0x42016828
 callout_handler: lock
-handle_event_queue: ev=0x42016848
-TimerStop:     0x42016848
+handle_event_queue: ev=0x42016828
+TimerStop:     0x42016828
 RadioStandby
 RadioSetChannel: freq=923400000
 RadioSetRxConfig
@@ -488,36 +507,36 @@ RadioStandby
 RadioSetModem
 RadioSetRxConfig done
 RadioRx
-TimerStop:     0x42017b2c
-TimerStart2:   0x42017b2c, 3000 ms
-callout_reset: evq=0x42017b48, ev=0x42017b2c
+TimerStop:     0x42017ad0
+TimerStart2:   0x42017ad0, 3000 ms
+callout_reset: evq=0x42017aec, ev=0x42017ad0
 RadioOnDioIrq
 RadioIrqProcess
 DIO1 add event
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 IRQ_PREAMBLE_DETECTED
 RadioOnDioIrq
 RadioIrqProcess
 DIO1 add event
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 IRQ_HEADER_VALID
 RadioOnDioIrq
 RadioIrqProcess
 DIO1 add event
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 IRQ_RX_DONE
-TimerStop:     0x42017b2c
+TimerStop:     0x42017ad0
 RadioOnDioIrq
 RadioIrqProcess
 RadioSleep
 DIO1 add event
-TimerStop:     0x42016864
+TimerStop:     0x42016844
 OnTxData
 
 ###### =========== MLME-Confirm ============ ######
@@ -527,7 +546,7 @@ OnJoinRequest
 
 OTAA
 
-DevAddr     :  000978EE
+DevAddr     :  00AF1E15
 
 
 DATA RATE   : DR_2
@@ -544,7 +563,7 @@ PrepareTxFrame: status=0, maxSize=11, currentSize=11
 LmHandlerSend: Data frame
 TODO: RtcGetCalendarTime
 TODO: RtcBkupRead
-RadioSetChannel: freq=923400000
+RadioSetChannel: freq=923200000
 RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=9, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
 RadioSetTxConfig: SpreadingFactor=9, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=128, CrcMode=1, InvertIQ=0
 RadioStandby
@@ -552,79 +571,79 @@ RadioSetModem
 SX126xSetTxParams: power=13, rampTime=7
 SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
 RadioSend: size=22
-40 ee 78 09 00 00 01 00 01 e0 5b b6 22 22 62 59 0d d4 6b ff cd 0e
+40 15 1e af 00 00 01 00 01 8d 9f 54 c1 b4 b1 5f 45 e3 80 b8 01 e1
 RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=22, CrcMode=1, InvertIQ=0
-TimerStop:     0x420179fc
-TimerStart2:   0x420179fc, 4000 ms
-callout_reset: evq=0x42017b48, ev=0x420179fc
+TimerStop:     0x420179a0
+TimerStart2:   0x420179a0, 4000 ms
+callout_reset: evq=0x42017aec, ev=0x420179a0
 
 ###### =========== MCPS-Request ============ ######
 ######           MCPS_UNCONFIRMED            ######
 ###### ===================================== ######
 STATUS      : OK
 PrepareTxFrame: Transmit OK
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
 DIO1 add event
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 IRQ_TX_DONE
-TimerStop:     0x420179fc
+TimerStop:     0x420179a0
 TODO: RtcGetCalendarTime
 TODO: RtcBkupRead
 RadioOnDioIrq
 RadioIrqProcess
 RadioSleep
 DIO1 add event
-TimerSetValue: 0x42016848, 980 ms
-TimerStart:    0x42016848
-TimerStop:     0x42016848
-TimerStart2:   0x42016848, 980 ms
-callout_reset: evq=0x42017b48, ev=0x42016848
-TimerSetValue: 0x42016864, 1988 ms
-TimerStart:    0x42016864
-TimerStop:     0x42016864
-TimerStart2:   0x42016864, 1988 ms
-callout_reset: evq=0x42017b48, ev=0x42016864
+TimerSetValue: 0x42016828, 980 ms
+TimerStart:    0x42016828
+TimerStop:     0x42016828
+TimerStart2:   0x42016828, 980 ms
+callout_reset: evq=0x42017aec, ev=0x42016828
+TimerSetValue: 0x42016844, 1988 ms
+TimerStart:    0x42016844
+TimerStop:     0x42016844
+TimerStart2:   0x42016844, 1988 ms
+callout_reset: evq=0x42017aec, ev=0x42016844
 TODO: RtcGetCalendarTime
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
 callout_handler: unlock
-callout_handler: evq=0x42017b48, ev=0x42016848
+callout_handler: evq=0x42017aec, ev=0x42016828
 callout_handler: lock
-handle_event_queue: ev=0x42016848
-TimerStop:     0x42016848
+handle_event_queue: ev=0x42016828
+TimerStop:     0x42016828
 RadioStandby
-RadioSetChannel: freq=923400000
+RadioSetChannel: freq=923200000
 RadioSetRxConfig
 RadioStandby
 RadioSetModem
 RadioSetRxConfig done
 RadioRx
-TimerStop:     0x42017b2c
-TimerStart2:   0x42017b2c, 3000 ms
-callout_reset: evq=0x42017b48, ev=0x42017b2c
+TimerStop:     0x42017ad0
+TimerStart2:   0x42017ad0, 3000 ms
+callout_reset: evq=0x42017aec, ev=0x42017ad0
 RadioOnDioIrq
 RadioIrqProcess
 DIO1 add event
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 IRQ_RX_TX_TIMEOUT
-TimerStop:     0x42017b2c
+TimerStop:     0x42017ad0
 RadioOnDioIrq
 RadioIrqProcess
 RadioSleep
 DIO1 add event
-TimerStop:     0x42016864
-TimerStop:     0x4201682c
+TimerStop:     0x42016844
+TimerStop:     0x4201680c
 OnTxData
 
 ###### =========== MCPS-Confirm ============ ######
@@ -639,20 +658,21 @@ TX DATA     : UNCONFIRMED
 48 69 20 4E 75 74 74 58 00
 
 DATA RATE   : DR_3
-U/L FREQ    : 923400000
+U/L FREQ    : 923200000
 TX POWER    : 0
 CHANNEL MASK: 0003
 
 TODO: EepromMcuWriteBuffer
 TODO: EepromMcuWriteBuffer
 UplinkProcess
-handle_event_queue: ev=0x42015ab8
+handle_event_queue: ev=0x42015a98
 RadioOnDioIrq
 RadioIrqProcess
 RadioOnDioIrq
 RadioIrqProcess
 UplinkProcess
 
------ All OK! BL602 has successfully joined the LoRaWAN Network
+===== All OK! BL602 has successfully joined the LoRaWAN Network
+
 root@raspberrypi:/home/pi/remote-bl602#
 ```
