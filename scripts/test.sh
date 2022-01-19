@@ -116,12 +116,25 @@ if [ "$match" == "" ]; then
 
     ##  If BL602 has joined the LoRaWAN Network, then everything is super hunky dory!
     if [ "$match" != "" ]; then
-        echo; echo "----- All OK! BL602 has successfully joined the LoRaWAN Network"
+        echo; echo "===== All OK! BL602 has successfully joined the LoRaWAN Network"
+
+    else
+        ##  Check whether NuttX has booted properly
+        set +e  ##  Don't exit when any command fails
+        match=$(grep "command not found" /tmp/test.log)
+        set -e  ##  Exit when any command fails
+
+        ##  If NuttX has booted properly, show the status
+        if [ "$match" != "" ]; then
+            echo; echo "===== Boot OK"
+        else
+            echo; echo "===== Unknown Status"
+        fi
     fi
 
 else
     ##  If BL602 has crashed, do the Crash Analysis
-    echo; echo "----- Crash Analysis"; echo
+    echo; echo "===== Boot FAILED. Below is the Crash Analysis"; echo
 
     ##  Don't exit when any command fails (grep)
     set +e
