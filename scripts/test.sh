@@ -8,8 +8,9 @@
 ## | SBC    | BL602    | Function
 ## | -------|----------|----------
 ## | GPIO 2 | GPIO 8   | Flashing Mode
-## | GPIO 3 | GPIO RST | Reset
+## | GPIO 3 | RST      | Reset
 ## | GND    | GND      | Ground
+## | USB    | USB      | USB UART
 ## Remember to install blflash as superuser: sudo cargo install blflash
 ## Based on https://www.ics.com/blog/gpio-programming-using-sysfs-interface
 
