@@ -32,13 +32,14 @@ Why are we doing this?
 
 # Run The Script
 
-Connect SBC to to BL602 like so...
+Connect SBC to BL602 like so...
 
 | SBC    | BL602    | Function
 | -------|----------|----------
 | GPIO 2 | GPIO 8   | Flashing Mode
 | GPIO 3 | GPIO RST | Reset
 | GND    | GND      | Ground
+| USB    | USB      | USB UART
 
 For auto-testing LoRaWAN, also connect BL602 to SX1262 as described below...
 
