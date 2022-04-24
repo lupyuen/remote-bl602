@@ -104,6 +104,7 @@ set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, send the test command to BL602
+    echo "uname -a" >/dev/ttyUSB0
     echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
     echo "lorawan_test" >/dev/ttyUSB0
 
