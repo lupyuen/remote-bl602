@@ -124,6 +124,8 @@ We connect PineDio Stack BL604 to the SBC for Auto Flash and Test like so...
 
 (Note: BL604 only works with USB 2.0, not USB 3.0! The SX1262 LoRa Module seems to have insufficient power when connected to USB 3.0 on SBC)
 
+Remember to discard the GPIO 8 Jumper!
+
 When we connect both PineDio Stack BL604 and PineCone BL602 to the SBC, we'll see two USB Devices: `/dev/ttyUSB0` and `/dev/ttyUSB1`
 
 How will we know which USB Device is for PineDio Stack and PineCone?
