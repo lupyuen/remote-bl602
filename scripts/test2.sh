@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 ## Auto Flash and Test BL602 with GPIO Control on Linux SBC.
-## (1) Before Flashing BL602: Set GPIO 8 to High and toggle the Reset Pin
-## (2) Flash BL602 over USB UART with blflash
-## (3) After Flashing BL602: Set GPIO 8 to Low and toggle the Reset Pin
-## (4) Capture the BL602 output over USB UART
 ## Pins to be connected:
 ## | SBC    | BL602    | Function
 ## | -------|----------|----------
@@ -11,8 +7,6 @@
 ## | GPIO 3 | RST      | Reset
 ## | GND    | GND      | Ground
 ## | USB    | USB      | USB UART
-## Remember to install blflash as superuser: sudo cargo install blflash
-## Based on https://www.ics.com/blog/gpio-programming-using-sysfs-interface
 
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
@@ -104,6 +98,9 @@ set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, send the test command to BL602
+    echo "uname -a" >/dev/ttyUSB0
+    echo "ls /dev" >/dev/ttyUSB0
+    
     echo ; echo "----- Send command to BL602: spi_test2" ; sleep 2
     echo "spi_test2" >/dev/ttyUSB0
 
