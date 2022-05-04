@@ -101,11 +101,11 @@ if [ "$match" == "" ]; then
     echo "uname -a" >/dev/ttyUSB0
     echo "ls /dev" >/dev/ttyUSB0
 
-    ####echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
-    ####echo "lorawan_test" >/dev/ttyUSB0
+    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
+    echo "lorawan_test" >/dev/ttyUSB0
 
-    echo ; echo "----- Send command to BL602: lvgltest" ; sleep 2
-    echo "lvgltest" >/dev/ttyUSB0
+    ####echo ; echo "----- Send command to BL602: lvgltest" ; sleep 2
+    ####echo "lvgltest" >/dev/ttyUSB0
 
     ##  Wait a while for the test command to run
     sleep 30
