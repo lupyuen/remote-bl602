@@ -85,6 +85,34 @@ We may now flash and test BL602 remotely over SSH...
 ssh my-sbc sudo remote-bl602/scripts/test.sh
 ```
 
+# PineDio Stack BL604
+
+TODO
+
+## Pins to be connected:
+## | SBC    | BL604    | Function
+## | -------|----------|----------
+## | GPIO 5 | GPIO 8   | Flashing Mode
+## | GPIO 6 | RST      | Reset
+## | GND    | GND      | Ground
+## | USB    | USB      | USB UART
+
+How to check which USB Port is connected to PineDio Stack or PineCone...
+
+```bash
+## Show /dev/ttyUSB0
+lsusb -v -s 1:3 2>&1 | grep bcdDevice | colrm 1 23
+
+## Show /dev/ttyUSB1
+lsusb -v -s 1:4 2>&1 | grep bcdDevice | colrm 1 23
+
+## Output for Pinedio Stack B604:
+## 2.64
+
+## Output for PineCone BL602:
+## 2.63
+```
+
 # Output Log for Upstream Build
 
 Below is the log for the __Daily Upstream Build__ (without the LoRaWAN Stack)...
