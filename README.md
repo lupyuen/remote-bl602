@@ -10,9 +10,11 @@ The script sends the "`lorawan_test`" command to BL602 after booting, to test th
 
 If BL602 crashes, the script runs a Crash Analysis to show the RISC-V Disassembly of the addresses in the Stack Trace.
 
-The script is here...
+The scripts are here...
 
 -   [scripts/test.sh](scripts/test.sh)
+
+-   [scripts/pinedio.sh](scripts/pinedio.sh)
 
 NuttX Builds are done by GitHub Actions...
 
@@ -21,6 +23,8 @@ NuttX Builds are done by GitHub Actions...
 -  [Release Build](https://github.com/lupyuen/incubator-nuttx/blob/master/.github/workflows/bl602-commit.yml) (Includes the LoRaWAN Stack)
 
 -  [Downstream Build](https://github.com/lupyuen/incubator-nuttx/blob/master/.github/workflows/bl602-downstream.yml) (Merges the LoRaWAN Stack with upstream updates)
+
+-  [PineDio Stack BL604 Build](https://github.com/lupyuen/incubator-nuttx/blob/pinedio/.github/workflows/pinedio.yml) (Includes the LoRaWAN Stack, ST7789 Display Driver, Touch Panel Driver, LVGL Test App)
 
 Why are we doing this?
 
@@ -34,12 +38,14 @@ Why are we doing this?
 
 Connect SBC to BL602 like so...
 
-| SBC    | BL602    | Function
-| -------|----------|----------
-| GPIO 2 | GPIO 8   | Flashing Mode
-| GPIO 3 | RST      | Reset
-| GND    | GND      | Ground
-| USB    | USB      | USB UART
+| SBC     | BL602    | Function
+| --------|----------|----------
+| GPIO 2  | GPIO 8   | Flashing Mode
+| GPIO 3  | RST      | Reset
+| GND     | GND      | Ground
+| USB 2.0 | USB      | USB UART
+
+(Note: BL602 only works with USB 2.0, not USB 3.0! The SX1262 LoRa Module seems to have insufficient power when connected to USB 3.0 on SBC)
 
 For auto-testing LoRaWAN, also connect BL602 to SX1262 as described below...
 
@@ -48,18 +54,24 @@ For auto-testing LoRaWAN, also connect BL602 to SX1262 as described below...
 To run the flash and test script for the __Daily Upstream Build__ (without LoRaWAN)...
 
 ```bash
-##  Install rustup as superuser, select default option
+##  Allow the user to access the GPIO and UART ports
+sudo usermod -a -G gpio    $USER
+sudo usermod -a -G dialout $USER
+
+##  Logout and login to refresh the permissions
+logout
+
+##  Install rustup, select default option
 sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sudo sh
 
-##  Install blflash as superuser for flashing BL602
-sudo ~root/.cargo/bin/cargo install blflash
+##  Install blflash for flashing BL602
+cargo install blflash
 
 ##  Download the flash and test script
 git clone --recursive https://github.com/lupyuen/remote-bl602/
-cd remote-bl602
 
-##  Auto flash and test BL602 as superuser
-sudo scripts/test.sh
+##  Auto flash and test BL602
+remote-bl602/scripts/test.sh
 ```
 
 (See the output log below)
@@ -67,37 +79,54 @@ sudo scripts/test.sh
 To run the flash and test script for the __Release Build__ (includes LoRaWAN)...
 
 ```bash
-##  Run shell as superuser, because we will be updating the environment variables
-sudo bash
-
 ##  Tell the script to download the Release Build (instead of the Upstream Build)
 export BUILD_PREFIX=release
 
 ##  Auto flash and test BL602
-./scripts/test.sh
+remote-bl602/scripts/test.sh
 ```
 
 (See the output log below)
 
-We may now flash and test BL602 remotely over SSH...
+To select the __Downstream Build__ by __Build Date__...
 
 ```bash
-ssh my-sbc sudo remote-bl602/scripts/test.sh
+##  Tell the script to download the Downstream Build for 2022-05-04
+export BUILD_PREFIX=downstream
+export BUILD_DATE=2022-05-04
+
+##  Auto flash and test BL602
+remote-bl602/scripts/test.sh
+```
+
+For __PineDio Stack BL604__...
+
+```bash
+remote-bl602/scripts/pinedio.sh
+```
+
+We may also flash and test BL602 remotely over SSH...
+
+```bash
+ssh my-sbc remote-bl602/scripts/test.sh
 ```
 
 # PineDio Stack BL604
 
-TODO
+We connect PineDio Stack BL604 to the SBC for Auto Flash and Test like so...
 
-## Pins to be connected:
-## | SBC    | BL604    | Function
-## | -------|----------|----------
-## | GPIO 5 | GPIO 8   | Flashing Mode
-## | GPIO 6 | RST      | Reset
-## | GND    | GND      | Ground
-## | USB    | USB      | USB UART
+| SBC     | BL604    | Function
+| --------|----------|----------
+| GPIO 5  | GPIO 8 _(GPIO Port)_  | Flashing Mode
+| GPIO 6  | RST _(JTAG Port)_     | Reset
+| GND     | GND _(JTAG Port)_     | Ground
+| USB 2.0 | USB Port            | USB UART
 
-How to check which USB Port is connected to PineDio Stack or PineCone...
+(Note: BL604 only works with USB 2.0, not USB 3.0! The SX1262 LoRa Module seems to have insufficient power when connected to USB 3.0 on SBC)
+
+When we connect both PineDio Stack BL604 and PineCone BL602 to the SBC, we'll see two USB Devices: `/dev/ttyUSB0` and `/dev/ttyUSB1`
+
+How will we know which USB Device is for PineDio Stack and PineCone?
 
 ```bash
 ## Show /dev/ttyUSB0
@@ -106,12 +135,14 @@ lsusb -v -s 1:3 2>&1 | grep bcdDevice | colrm 1 23
 ## Show /dev/ttyUSB1
 lsusb -v -s 1:4 2>&1 | grep bcdDevice | colrm 1 23
 
-## Output for Pinedio Stack B604:
+## Output for Pinedio Stack BL604:
 ## 2.64
 
 ## Output for PineCone BL602:
 ## 2.63
 ```
+
+TODO: Fix the script to use the correct USB Device
 
 # Output Log for Upstream Build
 
