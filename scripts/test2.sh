@@ -21,6 +21,11 @@ if [ "$BUILD_DATE" == '' ]; then
     export BUILD_DATE=$(date +'%Y-%m-%d')
 fi
 
+##  Default USB Device is /dev/ttyUSB0
+if [ "$USB_DEVICE" == '' ]; then
+    export USB_DEVICE=/dev/ttyUSB0
+fi
+
 ##  Add Rust to the PATH
 source $HOME/.cargo/env
 
@@ -61,7 +66,7 @@ echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 echo "----- BL602 is now in Flashing Mode"
 echo "----- Flash BL602 over USB UART with blflash"
 set -x  ##  Enable echo
-blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
+blflash flash /tmp/nuttx.bin --port $USB_DEVICE
 set +x  ##  Disable echo
 sleep 1
 
@@ -76,11 +81,11 @@ echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 echo "----- BL602 is now in Normal Mode"
 
 ##  Set USB UART to 2 Mbps
-stty -F /dev/ttyUSB0 raw 2000000
+stty -F $USB_DEVICE raw 2000000
 
 ##  Show the BL602 output and capture to /tmp/test.log.
 ##  Run this in the background so we can kill it later.
-cat /dev/ttyUSB0 | tee /tmp/test.log &
+cat $USB_DEVICE | tee /tmp/test.log &
 
 echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
 echo "----- Here is the BL602 Output..."
@@ -98,11 +103,11 @@ set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, send the test command to BL602
-    echo "uname -a" >/dev/ttyUSB0 ; sleep 1
-    echo "ls /dev" >/dev/ttyUSB0 ; sleep 1
+    echo "uname -a" >$USB_DEVICE ; sleep 1
+    echo "ls /dev" >$USB_DEVICE ; sleep 1
     
     echo ; echo "----- Send command to BL602: spi_test2" ; sleep 2
-    echo "spi_test2" >/dev/ttyUSB0
+    echo "spi_test2" >$USB_DEVICE
 
     ##  Wait a while for the test command to run
     sleep 30
