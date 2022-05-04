@@ -35,10 +35,10 @@ set +x  ##  Disable echo
 
 echo "----- Enable GPIO 5 and 6"
 if [ ! -d /sys/class/gpio/gpio5 ]; then
-    echo 2 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
+    echo 5 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
 fi
 if [ ! -d /sys/class/gpio/gpio6 ]; then
-    echo 3 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
+    echo 6 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
 fi
 
 echo "----- Set GPIO 5 and 6 as output"
