@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
-## Auto Flash and Test PineDio Stack BL604 with GPIO Control on Linux SBC.
+## Auto Flash and Test BL602 with GPIO Control on Linux SBC.
+## (1) Before Flashing BL602: Set GPIO 8 to High and toggle the Reset Pin
+## (2) Flash BL602 over USB UART with blflash
+## (3) After Flashing BL602: Set GPIO 8 to Low and toggle the Reset Pin
+## (4) Capture the BL602 output over USB UART
 ## Pins to be connected:
-## | SBC    | BL604    | Function
+## | SBC    | BL602    | Function
 ## | -------|----------|----------
-## | GPIO 5 | GPIO 8   | Flashing Mode
-## | GPIO 6 | RST      | Reset
+## | GPIO 2 | GPIO 8   | Flashing Mode
+## | GPIO 3 | RST      | Reset
 ## | GND    | GND      | Ground
 ## | USB    | USB      | USB UART
+## Remember to install blflash as superuser: sudo cargo install blflash
+## Based on https://www.ics.com/blog/gpio-programming-using-sysfs-interface
 
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
 ##  Default Build Prefix is "upstream"
 if [ "$BUILD_PREFIX" == '' ]; then
-    export BUILD_PREFIX=pinedio
+    export BUILD_PREFIX=upstream
 fi
 
 ##  Default Build Date is today (YYYY-MM-DD)
@@ -33,30 +39,30 @@ unzip -o nuttx.zip
 popd
 set +x  ##  Disable echo
 
-echo "----- Enable GPIO 5 and 6"
-if [ ! -d /sys/class/gpio/gpio5 ]; then
-    echo 5 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
+echo "----- Enable GPIO 2 and 3"
+if [ ! -d /sys/class/gpio/gpio2 ]; then
+    echo 2 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
 fi
-if [ ! -d /sys/class/gpio/gpio6 ]; then
-    echo 6 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
+if [ ! -d /sys/class/gpio/gpio3 ]; then
+    echo 3 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
 fi
 
-echo "----- Set GPIO 5 and 6 as output"
-echo out >/sys/class/gpio/gpio5/direction
-echo out >/sys/class/gpio/gpio6/direction
+echo "----- Set GPIO 2 and 3 as output"
+echo out >/sys/class/gpio/gpio2/direction
+echo out >/sys/class/gpio/gpio3/direction
 
-echo "----- Set GPIO 5 to High (BL602 Flashing Mode)"
-echo 1 >/sys/class/gpio/gpio5/value ; sleep 1
+echo "----- Set GPIO 2 to High (BL602 Flashing Mode)"
+echo 1 >/sys/class/gpio/gpio2/value ; sleep 1
 
-echo "----- Toggle GPIO 6 High-Low-High (Reset BL602)"
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 0 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 
-echo "----- Toggle GPIO 6 High-Low-High (Reset BL602 again)"
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602 again)"
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 0 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 
 echo "----- BL602 is now in Flashing Mode"
 echo "----- Flash BL602 over USB UART with blflash"
@@ -65,13 +71,13 @@ blflash flash /tmp/nuttx.bin --port /dev/ttyUSB0
 set +x  ##  Disable echo
 sleep 1
 
-echo "----- Set GPIO 5 to Low (BL602 Normal Mode)"
-echo 0 >/sys/class/gpio/gpio5/value ; sleep 1
+echo "----- Set GPIO 2 to Low (BL602 Normal Mode)"
+echo 0 >/sys/class/gpio/gpio2/value ; sleep 1
 
-echo "----- Toggle GPIO 6 High-Low-High (Reset BL602)"
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 0 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 
 echo "----- BL602 is now in Normal Mode"
 
@@ -82,11 +88,11 @@ stty -F /dev/ttyUSB0 raw 2000000
 ##  Run this in the background so we can kill it later.
 cat /dev/ttyUSB0 | tee /tmp/test.log &
 
-echo "----- Toggle GPIO 6 High-Low-High (Reset BL602)"
+echo "----- Toggle GPIO 3 High-Low-High (Reset BL602)"
 echo "----- Here is the BL602 Output..."
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 0 >/sys/class/gpio/gpio3/value ; sleep 1
+echo 1 >/sys/class/gpio/gpio3/value ; sleep 1
 
 ##  Wait a while for BL602 to finish booting
 sleep 1
@@ -98,14 +104,8 @@ set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, send the test command to BL602
-    echo "uname -a" >/dev/ttyUSB0
-    echo "ls /dev" >/dev/ttyUSB0
-
-    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
-    echo "lorawan_test" >/dev/ttyUSB0
-
-    ####echo ; echo "----- Send command to BL602: lvgltest" ; sleep 2
-    ####echo "lvgltest" >/dev/ttyUSB0
+    echo ; echo "----- Send command to BL602: spi_test2" ; sleep 2
+    echo "spi_test2" >/dev/ttyUSB0
 
     ##  Wait a while for the test command to run
     sleep 30
@@ -196,7 +196,7 @@ fi
 ##  Kill the background task that captures the BL602 output
 kill %1
 
-##  We don't disable GPIO 5 and 6 because otherwise BL602 might keep rebooting
+##  We don't disable GPIO 2 and 3 because otherwise BL602 might keep rebooting
 echo
 
 ##  TODO: Capture the script output and write it to the Body of the GitHub Release
