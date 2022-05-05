@@ -16,6 +16,8 @@ The scripts are here...
 
 -   [scripts/pinedio.sh](scripts/pinedio.sh)
 
+-   [scripts/pinedio2.sh](scripts/pinedio2.sh)
+
 NuttX Builds are done by GitHub Actions...
 
 -  [Daily Upstream Build](https://github.com/lupyuen/incubator-nuttx/blob/master/.github/workflows/bl602.yml) (Without the LoRaWAN Stack)
@@ -45,7 +47,7 @@ Connect SBC to BL602 like so...
 | GND     | GND      | Ground
 | USB 2.0 | USB      | USB UART
 
-(Note: BL602 only works with USB 2.0, not USB 3.0! The SX1262 LoRa Module seems to have insufficient power when connected to USB 3.0 on SBC)
+(Note: BL602 only works with __USB 2.0, not USB 3.0!__ The SX1262 LoRa Module seems to have insufficient power when connected to USB 3.0 on SBC)
 
 For auto-testing LoRaWAN, also connect BL602 to SX1262 as described below...
 
@@ -102,8 +104,14 @@ remote-bl602/scripts/test.sh
 For __PineDio Stack BL604__...
 
 ```bash
+##  Auto flash and test PineDio Stack BL604: LoRaWAN Test
 remote-bl602/scripts/pinedio.sh
+
+##  Auto test PineDio Stack BL604: Touchscreen Test
+remote-bl602/scripts/pinedio2.sh
 ```
+
+(See the output log below)
 
 We may also flash and test BL602 remotely over SSH...
 
@@ -122,9 +130,31 @@ We connect PineDio Stack BL604 to the SBC for Auto Flash and Test like so...
 | GND     | GND _(JTAG Port)_     | Ground
 | USB 2.0 | USB Port            | USB UART
 
-(Note: BL604 only works with USB 2.0, not USB 3.0! The SX1262 LoRa Module seems to have insufficient power when connected to USB 3.0 on SBC)
+(Note: BL604 only works with __USB 2.0, not USB 3.0!__ The SX1262 LoRa Module seems to have insufficient power when connected to USB 3.0 on SBC)
 
-GPIO 8 Jumper must be set to Low (Non-Flashing Mode)! (Or the LoRaWAN Test App will fail because the timers will get triggered too quickly)
+__GPIO 8 Jumper must be set to Low (Non-Flashing Mode)!__
+
+(Or the LoRaWAN Test App will fail because the timers will get triggered too quickly)
+
+# Test PineDio Stack BL604
+
+We auto flash and test PineDio Stack BL604 in two scripts.
+
+The first script auto-flashes the PineDio Stack Firmware and runs the LoRaWAN Test App...
+
+-   [scripts/pinedio.sh](scripts/pinedio.sh)
+
+The second script auto-restarts PineDio Stack and runs the LVGL Test App (to test the touchscreen)...
+
+-   [scripts/pinedio2.sh](scripts/pinedio2.sh)
+
+We must tap the screen to generate a Touch Event for the test to succeed.
+
+[(Later we might automate this with a "Robot Finger")](https://youtu.be/mb3zcacDGPc)
+
+(See the output log below)
+
+# Select USB Device
 
 When we connect both PineDio Stack BL604 and PineCone BL602 to the SBC, we'll see two USB Devices: `/dev/ttyUSB0` and `/dev/ttyUSB1`
 
@@ -144,6 +174,19 @@ lsusb -v -s 1:4 2>&1 | grep bcdDevice | colrm 1 23
 ## Output for PineCone BL602:
 ## 2.63
 ## See https://gist.github.com/lupyuen/3ba0dc0789fd282bbfcf9dd5c3ff8908
+```
+
+Here's how we override the Default USB Device for PineDio Stack...
+
+```bash
+##  Tell the script to use /dev/ttyUSB1
+export USB_DEVICE=/dev/ttyUSB1
+
+##  Auto flash and test PineDio Stack BL604: LoRaWAN Test
+remote-bl602/scripts/pinedio.sh
+
+##  Auto test PineDio Stack BL604: Touchscreen Test
+remote-bl602/scripts/pinedio2.sh
 ```
 
 TODO: Fix the script to use the correct USB Device
@@ -739,4 +782,600 @@ UplinkProcess
 ===== All OK! BL602 has successfully joined the LoRaWAN Network
 
 root@raspberrypi:/home/pi/remote-bl602#
+```
+
+# Output Log for PineDio Stack BL604 Build
+
+Below is the log for the __PineDio Stack BL604 Build__ (includes the LoRaWAN Stack, ST7789 Display Driver, Touch Panel Driver, LVGL Test App)...
+
+```text
+pi@raspberrypi:~ $ ./pinedio.sh
++ cd /home/pi/remote-bl602
++ git pull
+Already up to date.
++ lsusb -v -s 1:3
++ grep bcdDevice
++ colrm 1 23
+2.63
++ lsusb -v -s 1:4
++ grep bcdDevice
++ colrm 1 23
+2.64
++ export USB_DEVICE=/dev/ttyUSB1
++ USB_DEVICE=/dev/ttyUSB1
++ /home/pi/remote-bl602/scripts/pinedio.sh
++ '[' '' == '' ']'
++ export BUILD_PREFIX=pinedio
++ BUILD_PREFIX=pinedio
++ '[' '' == '' ']'
+++ date +%Y-%m-%d
++ export BUILD_DATE=2022-05-05
++ BUILD_DATE=2022-05-05
++ '[' /dev/ttyUSB1 == '' ']'
++ source /home/pi/.cargo/env
+++ export PATH=/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
+++ PATH=/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
++ set +x
+----- Download the latest pinedio NuttX build for 2022-05-05
++ wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/pinedio-2022-05-05/nuttx.zip -O /tmp/nuttx.zip
++ pushd /tmp
+/tmp ~/remote-bl602
++ unzip -o nuttx.zip
+Archive:  nuttx.zip
+  inflating: nuttx
+  inflating: nuttx.S
+  inflating: nuttx.bin
+  inflating: nuttx.board
+  inflating: nuttx.bringup
+  inflating: nuttx.config
+  inflating: nuttx.hex
+  inflating: nuttx.manifest
+  inflating: nuttx.map
++ popd
+~/remote-bl602
++ set +x
+----- Enable GPIO 5 and 6
+----- Set GPIO 5 and 6 as output
+----- Set GPIO 5 to High (BL602 Flashing Mode)
+----- Toggle GPIO 6 High-Low-High (Reset BL602)
+----- Toggle GPIO 6 High-Low-High (Reset BL602 again)
+----- BL602 is now in Flashing Mode
+----- Flash BL602 over USB UART with blflash
++ blflash flash /tmp/nuttx.bin --port /dev/ttyUSB1
+[INFO  blflash::flasher] Start connection...
+[TRACE blflash::flasher] 5ms send count 55
+[TRACE blflash::flasher] handshake sent elapsed 297.388µs
+[INFO  blflash::flasher] Connection Succeed
+[INFO  blflash] Bootrom version: 1
+[TRACE blflash] Boot info: BootInfo { len: 14, bootrom_version: 1, otp_info: [0, 0, 0, 0, 3, 0, 4, 40, ad, b8, e3, 4c, b9, 7c, 15, 0] }
+[INFO  blflash::flasher] Sending eflash_loader...
+[INFO  blflash::flasher] Finished 2.559526151s 11.17KiB/s
+[TRACE blflash::flasher] 5ms send count 500
+[TRACE blflash::flasher] handshake sent elapsed 5.21273ms
+[INFO  blflash::flasher] Entered eflash_loader
+[INFO  blflash::flasher] Skip segment addr: 0 size: 47504 sha256 matches
+[INFO  blflash::flasher] Skip segment addr: e000 size: 272 sha256 matches
+[INFO  blflash::flasher] Skip segment addr: f000 size: 272 sha256 matches
+[INFO  blflash::flasher] Erase flash addr: 10000 size: 504288
+[INFO  blflash::flasher] Program flash... 2bea6e72b3247483532ea61fb9415a9f6718d50bb9e7ffa8992ed078185a8f3f
+[INFO  blflash::flasher] Program done 6.002709982s 82.05KiB/s
+[INFO  blflash::flasher] Skip segment addr: 1f8000 size: 5671 sha256 matches
+[INFO  blflash] Success
++ set +x
+----- Set GPIO 5 to Low (BL602 Normal Mode)
+----- Toggle GPIO 6 High-Low-High (Reset BL602)
+----- BL602 is now in Normal Mode
+----- Toggle GPIO 6 High-Low-High (Reset BL602)
+----- Here is the BL602 Output...
+▒gplh_enable: WARNING: pin9: Already detached
+gplh_enable: WARNING: pin12: Already detached
+gplh_enable: WARNING: pin19: Already detached
+cst816s_register: path=/dev/input0, addr=21
+cst816s_register: Driver registered
+
+NuttShell (NSH) NuttX-10.3.0-RC0
+nsh> uname -a
+NuttX 10.3.0-RC0 4db8d2954d May  5 2022 08:58:49 risc-v bl602evb
+nsh> ls /dev
+/dev:
+ console
+ gpio10
+ gpio12
+ gpio14
+ gpio15
+ gpio19
+ gpio20
+ gpio21
+ gpio3
+ gpio9
+ i2c0
+ input0
+ lcd0
+ null
+ spi0
+ spitest0
+ timer0
+ urandom
+ zero
+nsh>
+----- Send command to BL602: lorawan_test
+lorawan_test
+init_entropy_pool
+offset = 2209
+temperature = 22.055979 Celsius
+offset = 2209
+temperature = 26.957306 Celsius
+offset = 2209
+temperature = 25.667484 Celsius
+offset = 2209
+temperature = 25.667484 Celsius
+
+###### ===================================== ######
+
+Application name   : lorawan_test
+Application version: 1.2.0
+GitHub base version: 5.0.0
+
+###### ===================================== ######
+
+init_event_queue
+TimerInit:     0x4201c76c
+TimerInit:     0x4201c788
+TimerInit:     0x4201c7a4
+TimerInit:     0x4201c820
+TimerInit:     0x4201c8d4
+TimerInit:     0x4201c8f0
+TimerInit:     0x4201c90c
+TimerInit:     0x4201c928
+TODO: RtcGetCalendarTime
+TODO: SX126xReset
+init_gpio
+DIO1 pintype before=5
+init_gpio: change DIO1 to Trigger GPIO gInterrupt on Rising Edge
+plh_enable: WARNING: pin19: Already detached
+DIO1 pintype after=8
+Starting process_dio1
+init_spi
+SX126xSetTxParams: power=22, rampTime=7
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
+TimerInit:     0x4201b86c
+TimerInit:     0x4201b7d8
+RadioSetModem
+RadioSetModem
+RadioSetPublicNetwork: public syncword=3444
+RadioSleep
+callout_handler: lock
+process_dio1 started
+process_dio1: event=0x4201b894
+TODO: EepromMcuReadBuffer
+TODO: EepromMcuReadBuffer
+TODO: EepromMcuReadBuffer
+TODO: EepromMcuReadBuffer
+TODO: EepromMcuReadBuffer
+TODO: EepromMcuReadBuffer
+TODO: EepromMcuReadBuffer
+TODO: EepromMcuReadBuffer
+RadioSetModem
+RadioSetPublicNetwork: public syncword=3444
+DevEui      : 4B-C1-5E-E7-37-7B-B1-5B
+JoinEui     : 00-00-00-00-00-00-00-00
+Pin         : 00-00-00-00
+
+TimerInit:     0x4201c3c4
+TimerInit:     0x4201c3e0
+TimerInit:     0x4201c2a4
+TODO: RtcGetCalendarTime
+TODO: RtcBkupRead
+TODO: RtcBkupRead
+RadioSetChannel: freq=923200000
+RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=10, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
+RadioSetTxConfig: SpreadingFactor=10, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=255, CrcMode=1, InvertIQ=0
+RadioStandby
+RadioSetModem
+SX126xSetTxParams: power=13, rampTime=7
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
+SecureElementRandomNumber: 0x2365edd0
+RadioSend: size=23
+00 00 00 00 00 00 00 00 00 5b b1 7b 37 e7 5e c1 4b d0 ed d6 02 42 41
+RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=23, CrcMode=1, InvertIQ=0
+TimerStop:     0x4201b86c
+TimerStart2:   0x4201b86c, 4000 ms
+callout_reset: evq=0x420131a8, ev=0x4201b86c
+
+###### =========== MLME-Request ============ ######
+######               MLME_JOIN               ######
+###### ===================================== ######
+STATUS      : OK
+StartTxProcess
+TimerInit:     0x4201a90c
+TimerSetValue: 0x4201a90c, 42249 ms
+OnTxTimerEvent: timeout in 42249 ms, event=0
+TimerStop:     0x4201a90c
+TimerSetValue: 0x4201a90c, 42249 ms
+TimerStart:    0x4201a90c
+TimerStop:     0x4201a90c
+TimerStart2:   0x4201a90c, 42249 ms
+callout_reset: evq=0x420131a8, ev=0x4201a90c
+handle_event_queue
+DIO1 add event
+handle_event_queue: ev=0x4201b894
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_TX_DONE
+TimerStop:     0x4201b86c
+TODO: RtcGetCalendarTime
+TODO: RtcBkupRead
+RadioOnDioIrq
+RadioIrqProcess
+RadioSleep
+TimerSetValue: 0x4201c788, 4988 ms
+TimerStart:    0x4201c788
+TimerStop:     0x4201c788
+TimerStart2:   0x4201c788, 4988 ms
+callout_reset: evq=0x420131a8, ev=0x4201c788
+TimerSetValue: 0x4201c7a4, 5988 ms
+TimerStart:    0x4201c7a4
+TimerStop:     0x4201c7a4
+TimerStart2:   0x4201c7a4, 5988 ms
+callout_reset: evq=0x420131a8, ev=0x4201c7a4
+TODO: RtcGetCalendarTime
+callout_handler: unlock
+callout_handler: evq=0x420131a8, ev=0x4201c788
+callout_handler: lock
+handle_event_queue: ev=0x4201c788
+TimerStop:     0x4201c788
+RadioStandby
+RadioSetChannel: freq=923200000
+RadioSetRxConfig
+RadioStandby
+RadioSetModem
+RadioSetRxConfig done
+RadioRx
+TimerStop:     0x4201b7d8
+TimerStart2:   0x4201b7d8, 3000 ms
+callout_reset: evq=0x420131a8, ev=0x4201b7d8
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x4201b894
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_PREAMBLE_DETECTED
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x4201b894
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_HEADER_VALID
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x4201b894
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_RX_DONE
+TimerStop:     0x4201b7d8
+RadioOnDioIrq
+RadioIrqProcess
+RadioSleep
+TimerStop:     0x4201c7a4
+OnTxData
+
+###### =========== MLME-Confirm ============ ######
+STATUS      : OK
+OnJoinRequest
+###### ===========   JOINED     ============ ######
+
+OTAA
+
+DevAddr     :  00F76FBF
+
+
+DATA RATE   : DR_2
+
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+UplinkProcess
+PrepareTxFrame: Transmit to LoRaWAN: Hi NuttX (9 bytes)
+PrepareTxFrame: status=0, maxSize=11, currentSize=11
+LmHandlerSend: Data frame
+TODO: RtcGetCalendarTime
+TODO: RtcBkupRead
+RadioSetChannel: freq=923400000
+RadioSetTxConfig: modem=1, power=13, fdev=0, bandwidth=0, datarate=9, coderate=1, preambleLen=8, fixLen=0, crcOn=1, freqHopOn=0, hopPeriod=0, iqInverted=0, timeout=4000
+RadioSetTxConfig: SpreadingFactor=9, Bandwidth=4, CodingRate=1, LowDatarateOptimize=0, PreambleLength=8, HeaderType=0, PayloadLength=128, CrcMode=1, InvertIQ=0
+RadioStandby
+RadioSetModem
+SX126xSetTxParams: power=13, rampTime=7
+SX126xSetPaConfig: paDutyCycle=4, hpMax=7, deviceSel=0, paLut=1
+RadioSend: size=22
+40 bf 6f f7 00 00 01 00 01 34 9a 34 20 a6 ed 59 55 ae 23 55 11 70
+RadioSend: PreambleLength=8, HeaderType=0, PayloadLength=22, CrcMode=1, InvertIQ=0
+TimerStop:     0x4201b86c
+TimerStart2:   0x4201b86c, 4000 ms
+callout_reset: evq=0x420131a8, ev=0x4201b86c
+
+###### =========== MCPS-Request ============ ######
+######           MCPS_UNCONFIRMED            ######
+###### ===================================== ######
+STATUS      : OK
+PrepareTxFrame: Transmit OK
+DIO1 add event
+handle_event_queue: ev=0x4201b894
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_TX_DONE
+TimerStop:     0x4201b86c
+TODO: RtcGetCalendarTime
+TODO: RtcBkupRead
+RadioOnDioIrq
+RadioIrqProcess
+RadioSleep
+TimerSetValue: 0x4201c788, 980 ms
+TimerStart:    0x4201c788
+TimerStop:     0x4201c788
+TimerStart2:   0x4201c788, 980 ms
+callout_reset: evq=0x420131a8, ev=0x4201c788
+TimerSetValue: 0x4201c7a4, 1988 ms
+TimerStart:    0x4201c7a4
+TimerStop:     0x4201c7a4
+TimerStart2:   0x4201c7a4, 1988 ms
+callout_reset: evq=0x420131a8, ev=0x4201c7a4
+TODO: RtcGetCalendarTime
+callout_handler: unlock
+callout_handler: evq=0x420131a8, ev=0x4201c788
+callout_handler: lock
+handle_event_queue: ev=0x4201c788
+TimerStop:     0x4201c788
+RadioStandby
+RadioSetChannel: freq=923400000
+RadioSetRxConfig
+RadioStandby
+RadioSetModem
+RadioSetRxConfig done
+RadioRx
+TimerStop:     0x4201b7d8
+TimerStart2:   0x4201b7d8, 3000 ms
+callout_reset: evq=0x420131a8, ev=0x4201b7d8
+RadioOnDioIrq
+RadioIrqProcess
+DIO1 add event
+handle_event_queue: ev=0x4201b894
+RadioOnDioIrq
+RadioIrqProcess
+IRQ_RX_TX_TIMEOUT
+TimerStop:     0x4201b7d8
+RadioOnDioIrq
+RadioIrqProcess
+RadioSleep
+TimerStop:     0x4201c7a4
+TimerStop:     0x4201c76c
+OnTxData
+
+###### =========== MCPS-Confirm ============ ######
+STATUS      : OK
+
+###### =====   UPLINK FRAME        1   ===== ######
+
+CLASS       : A
+
+TX PORT     : 1
+TX DATA     : UNCONFIRMED
+48 69 20 4E 75 74 74 58 00
+
+DATA RATE   : DR_3
+U/L FREQ    : 923400000
+TX POWER    : 0
+CHANNEL MASK: 0003
+
+TODO: EepromMcuWriteBuffer
+TODO: EepromMcuWriteBuffer
+UplinkProcess
+
+===== All OK! BL602 has successfully joined the LoRaWAN Network
+
++ /home/pi/remote-bl602/scripts/pinedio2.sh
++ '[' '' == '' ']'
++ export BUILD_PREFIX=pinedio
++ BUILD_PREFIX=pinedio
++ '[' '' == '' ']'
+++ date +%Y-%m-%d
++ export BUILD_DATE=2022-05-05
++ BUILD_DATE=2022-05-05
++ '[' /dev/ttyUSB1 == '' ']'
++ source /home/pi/.cargo/env
+++ export PATH=/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
+++ PATH=/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/home/pi/.cargo/bin:/usr/lib/go-1.13.6/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
++ set +x
+----- Enable GPIO 5 and 6
+----- Set GPIO 5 and 6 as output
+----- Set GPIO 5 to Low (BL602 Normal Mode)
+----- Toggle GPIO 6 High-Low-High (Reset BL602)
+----- BL602 is now in Normal Mode
+----- Toggle GPIO 6 High-Low-High (Reset BL602)
+----- Here is the BL602 Output...
+▒gplh_enable: WARNING: pin9: Already detached
+gplh_enable: WARNING: pin12: Already detached
+gplh_enable: WARNING: pin19: Already detached
+cst816s_register: path=/dev/input0, addr=21
+cst816s_register: Driver registered
+
+NuttShell (NSH) NuttX-10.3.0-RC0
+nsh> uname -a
+NuttX 10.3.0-RC0 4db8d2954d May  5 2022 08:58:49 risc-v bl602evb
+nsh> ls /dev
+/dev:
+ console
+ gpio10
+ gpio12
+ gpio14
+ gpio15
+ gpio19
+ gpio20
+ gpio21
+ gpio3
+ gpio9
+ i2c0
+ input0
+ lcd0
+ null
+ spi0
+ spitest0
+ timer0
+ urandom
+ zero
+nsh>
+----- Send command to BL602: lvgltest
+lvgltest
+tp_init: Opening /dev/input0
+cst816s_open:
+
+----- HELLO HUMAN: TOUCH PINEDIO STACK NOW
+cst816s_poll_notify:
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=0, y=0
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       0
+cst816s_get_touch_data:   y:       0
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: DOWN: id=0, touch=0, x=83, y=106
+cst816s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   19
+cst816s_get_touch_data:   x:      83
+cst816s_get_touch_data:   y:       106
+cst816s_get_touch_data:
+cst816s_i2c_read:
+bl602_i2c_transfer: i2c transfer success
+bl602_i2c_transfer: i2c transfer success
+cst816s_get_touch_data: Invalid touch data: id=9, touch=2, x=639, y=1688
+cst816s_get_touch_data: UP: id=0, touch=2, x=83, y=106
+cst16s_get_touch_data:   id:      0
+cst816s_get_touch_data:   flags:   0c
+cst816s_get_touch_data:   x:       83
+cst816s_get_touch_data:   y:       106
+
+===== All OK! BL604 has responded to touch
+
++ read -p 'Press Enter to shutdown'
+Press Enter to shutdown
 ```
