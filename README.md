@@ -140,15 +140,21 @@ __GPIO 8 Jumper must be set to Low (Non-Flashing Mode)!__
 
 We auto flash and test PineDio Stack BL604 in two scripts.
 
-The first script auto-flashes the PineDio Stack Firmware and runs the LoRaWAN Test App...
+The first script auto-flashes the PineDio Stack Firmware [(auto-built by GitHub Actions)](https://github.com/lupyuen/incubator-nuttx/blob/pinedio/.github/workflows/pinedio.yml) and runs the [LoRaWAN Test App](https://github.com/lupyuen/lorawan_test)...
 
 -   [scripts/pinedio.sh](scripts/pinedio.sh)
 
-The second script auto-restarts PineDio Stack and runs the LVGL Test App (to test the touchscreen)...
+The [LoRaWAN Test App](https://github.com/lupyuen/lorawan_test) connects to a LoRaWAN Gateway (ChirpStack) and sends a LoRaWAN Data Packet to the Gateway.
+
+(Which means that Timers, SPI, GPIO Input / Ouput / Interrupt are working OK)
+
+The second script auto-restarts PineDio Stack and runs the [LVGL Test App](https://github.com/lupyuen/lvgltest-nuttx) (to test the touchscreen)...
 
 -   [scripts/pinedio2.sh](scripts/pinedio2.sh)
 
-We must tap the screen to generate a Touch Event for the test to succeed.
+The [LVGL Test App](https://github.com/lupyuen/lvgltest-nuttx) renders a screen to the ST7789 SPI Display and waits for a Touch Event from the CST816S I2C Touch Panel.
+
+For the test to succeed, we must tap the screen to generate a Touch Event.
 
 [(Later we might automate this with a "Robot Finger")](https://youtu.be/mb3zcacDGPc)
 
