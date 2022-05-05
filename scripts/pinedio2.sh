@@ -27,16 +27,16 @@ if [ "$USB_DEVICE" == '' ]; then
 fi
 
 ##  Add Rust to the PATH
-source $HOME/.cargo/env
+# source $HOME/.cargo/env
 
-set +x  ##  Disable echo
-echo "----- Download the latest $BUILD_PREFIX NuttX build for $BUILD_DATE"
-set -x  ##  Enable echo
-wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/$BUILD_PREFIX-$BUILD_DATE/nuttx.zip -O /tmp/nuttx.zip
-pushd /tmp
-unzip -o nuttx.zip
-popd
-set +x  ##  Disable echo
+# set +x  ##  Disable echo
+# echo "----- Download the latest $BUILD_PREFIX NuttX build for $BUILD_DATE"
+# set -x  ##  Enable echo
+# wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/$BUILD_PREFIX-$BUILD_DATE/nuttx.zip -O /tmp/nuttx.zip
+# pushd /tmp
+# unzip -o nuttx.zip
+# popd
+# set +x  ##  Disable echo
 
 echo "----- Enable GPIO 5 and 6"
 if [ ! -d /sys/class/gpio/gpio5 ]; then
@@ -50,25 +50,25 @@ echo "----- Set GPIO 5 and 6 as output"
 echo out >/sys/class/gpio/gpio5/direction
 echo out >/sys/class/gpio/gpio6/direction
 
-echo "----- Set GPIO 5 to High (BL602 Flashing Mode)"
-echo 1 >/sys/class/gpio/gpio5/value ; sleep 1
+# echo "----- Set GPIO 5 to High (BL602 Flashing Mode)"
+# echo 1 >/sys/class/gpio/gpio5/value ; sleep 1
 
-echo "----- Toggle GPIO 6 High-Low-High (Reset BL602)"
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+# echo "----- Toggle GPIO 6 High-Low-High (Reset BL602)"
+# echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+# echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
+# echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
 
-echo "----- Toggle GPIO 6 High-Low-High (Reset BL602 again)"
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
-echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+# echo "----- Toggle GPIO 6 High-Low-High (Reset BL602 again)"
+# echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
+# echo 0 >/sys/class/gpio/gpio6/value ; sleep 1
+# echo 1 >/sys/class/gpio/gpio6/value ; sleep 1
 
-echo "----- BL602 is now in Flashing Mode"
-echo "----- Flash BL602 over USB UART with blflash"
-set -x  ##  Enable echo
-blflash flash /tmp/nuttx.bin --port $USB_DEVICE
-set +x  ##  Disable echo
-sleep 1
+# echo "----- BL602 is now in Flashing Mode"
+# echo "----- Flash BL602 over USB UART with blflash"
+# set -x  ##  Enable echo
+# blflash flash /tmp/nuttx.bin --port $USB_DEVICE
+# set +x  ##  Disable echo
+# sleep 1
 
 echo "----- Set GPIO 5 to Low (BL602 Normal Mode)"
 echo 0 >/sys/class/gpio/gpio5/value ; sleep 1
@@ -106,11 +106,11 @@ if [ "$match" == "" ]; then
     echo "uname -a" >$USB_DEVICE ; sleep 1
     echo "ls /dev" >$USB_DEVICE ; sleep 1
 
-    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
-    echo "lorawan_test" >$USB_DEVICE
+    ####echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
+    ####echo "lorawan_test" >$USB_DEVICE
 
-    ####echo ; echo "----- Send command to BL602: lvgltest" ; sleep 2
-    ####echo "lvgltest" >$USB_DEVICE
+    echo ; echo "----- Send command to BL602: lvgltest" ; sleep 2
+    echo "lvgltest" >$USB_DEVICE
 
     ##  Wait a while for the test command to run
     sleep 30

@@ -139,9 +139,11 @@ lsusb -v -s 1:4 2>&1 | grep bcdDevice | colrm 1 23
 
 ## Output for Pinedio Stack BL604:
 ## 2.64
+## See https://gist.github.com/lupyuen/dc8c482f2b31b25d329cd93dc44f0044
 
 ## Output for PineCone BL602:
 ## 2.63
+## See https://gist.github.com/lupyuen/3ba0dc0789fd282bbfcf9dd5c3ff8908
 ```
 
 TODO: Fix the script to use the correct USB Device
