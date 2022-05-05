@@ -27,9 +27,9 @@ if [ "$USB_DEVICE" == '' ]; then
 fi
 
 ##  Add Rust to the PATH
-# source $HOME/.cargo/env
+source $HOME/.cargo/env
 
-# set +x  ##  Disable echo
+set +x  ##  Disable echo
 # echo "----- Download the latest $BUILD_PREFIX NuttX build for $BUILD_DATE"
 # set -x  ##  Enable echo
 # wget -q https://github.com/lupyuen/incubator-nuttx/releases/download/$BUILD_PREFIX-$BUILD_DATE/nuttx.zip -O /tmp/nuttx.zip
@@ -110,19 +110,20 @@ if [ "$match" == "" ]; then
     ####echo "lorawan_test" >$USB_DEVICE
 
     echo ; echo "----- Send command to BL602: lvgltest" ; sleep 2
-    echo "lvgltest" >$USB_DEVICE
+    echo "lvgltest" >$USB_DEVICE ; sleep 1
+    echo ; echo "----- HELLO HUMAN: TOUCH PINEDIO STACK NOW" ; sleep 2
 
     ##  Wait a while for the test command to run
     sleep 30
 
-    ##  Check whether BL602 has joined the LoRaWAN Network
+    ##  Check whether BL604 has responded to touch
     set +e  ##  Don't exit when any command fails
-    match=$(grep "JOINED" /tmp/test.log)
+    match=$(grep "cst816s_get_touch_data: UP: id=0, touch=2, x=" /tmp/test.log)
     set -e  ##  Exit when any command fails
 
-    ##  If BL602 has joined the LoRaWAN Network, then everything is super hunky dory!
+    ##  If BL604 has responded to touch, then everything is super hunky dory!
     if [ "$match" != "" ]; then
-        echo; echo "===== All OK! BL602 has successfully joined the LoRaWAN Network"
+        echo; echo "===== All OK! BL604 has responded to touch"
 
     else
         ##  Check whether NuttX has booted properly
