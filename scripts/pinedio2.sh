@@ -106,10 +106,8 @@ if [ "$match" == "" ]; then
     echo "uname -a" >$USB_DEVICE ; sleep 1
     echo "ls /dev" >$USB_DEVICE ; sleep 1
 
-    ####echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
-    ####echo "lorawan_test" >$USB_DEVICE
-
     echo ; echo "----- Send command to BL602: lvgltest" ; sleep 2
+    echo "" >$USB_DEVICE
     echo "lvgltest" >$USB_DEVICE ; sleep 1
     echo ; echo "----- HELLO HUMAN: TOUCH PINEDIO STACK NOW" ; sleep 2
 

@@ -107,6 +107,7 @@ if [ "$match" == "" ]; then
     echo "ls /dev" >$USB_DEVICE ; sleep 1
     
     echo ; echo "----- Send command to BL602: spi_test2" ; sleep 2
+    echo "" >$USB_DEVICE
     echo "spi_test2" >$USB_DEVICE
 
     ##  Wait a while for the test command to run

@@ -108,6 +108,7 @@ if [ "$match" == "" ]; then
     echo "spi_test2" >$USB_DEVICE ; sleep 5
 
     echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
+    echo "" >$USB_DEVICE
     echo "lorawan_test" >$USB_DEVICE
 
     ##  Wait a while for the test command to run
