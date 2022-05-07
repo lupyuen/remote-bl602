@@ -11,11 +11,6 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
-SCRIPT_PATH="${BASH_SOURCE}"
-SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
-echo $SCRIPT_DIR/pinedio2.sh
-exit
-
 ##  Default Build Prefix is "upstream"
 if [ "$BUILD_PREFIX" == '' ]; then
     export BUILD_PREFIX=pinedio
@@ -207,6 +202,11 @@ kill %1
 
 ##  We don't disable GPIO 5 and 6 because otherwise BL602 might keep rebooting
 echo
+
+##  Start the second script: pinedio2.sh
+SCRIPT_PATH="${BASH_SOURCE}"
+SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
+$SCRIPT_DIR/pinedio2.sh
 
 ##  TODO: Capture the script output and write it to the Body of the GitHub Release
 ##  script -c "sudo remote-bl602/scripts/test.sh" /tmp/test.script
