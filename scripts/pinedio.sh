@@ -11,6 +11,11 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
+SCRIPT_PATH="${BASH_SOURCE}"
+SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
+echo $SCRIPT_DIR/pinedio2.sh
+exit
+
 ##  Default Build Prefix is "upstream"
 if [ "$BUILD_PREFIX" == '' ]; then
     export BUILD_PREFIX=pinedio
