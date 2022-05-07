@@ -4,6 +4,12 @@ Read the article...
 
 -   ["Auto Flash and Test NuttX on RISC-V BL602"](https://lupyuen.github.io/articles/auto)
 
+Watch the demo on YouTube...
+
+-   ["Auto Flash and Test on PineDio Stack BL604"](https://youtu.be/JX7rWqWTOW4)
+
+-   ["Auto Flash and Test on PineCone BL602"](https://youtu.be/JtnOyl5cYjo)
+
 This script runs on a Linux Single-Board Computer (SBC) to automagically Flash and Test BL602, with the Latest Daily Build of Apache NuttX OS.
 
 The script sends the "`lorawan_test`" command to BL602 after booting, to test the LoRaWAN Stack.
@@ -37,6 +43,10 @@ Why are we doing this?
 -   I write articles about NuttX OS. I need to pick the __Latest Stable Build__ of NuttX for testing the NuttX code in my articles. [(Like these)](https://lupyuen.github.io/articles/book#nuttx-on-bl602)
 
 # Run The Script
+
+Watch the demo on YouTube...
+
+-   ["Auto Flash and Test on PineCone BL602"](https://youtu.be/JtnOyl5cYjo)
 
 Connect SBC to BL602 like so...
 
@@ -120,6 +130,10 @@ ssh my-sbc remote-bl602/scripts/test.sh
 ```
 
 # PineDio Stack BL604
+
+Watch the demo on YouTube...
+
+-   ["Auto Flash and Test on PineDio Stack BL604"](https://youtu.be/JX7rWqWTOW4)
 
 We connect PineDio Stack BL604 to the SBC for Auto Flash and Test like so...
 
