@@ -134,6 +134,7 @@ if [ "$match" == "" ]; then
             echo; echo "===== Boot OK"
         else
             echo; echo "===== Unknown Status"
+            test_status=unknown
         fi
     fi
 
@@ -202,6 +203,14 @@ kill %1
 
 ##  We don't disable GPIO 2 and 3 because otherwise BL602 might keep rebooting
 echo
+
+##  If status is unknown, start the second script
+if [ "$test_status" == "unknown" ]; then
+    read -p "Disconnect and reconnect the USB cable. Press Enter to continue..."
+    SCRIPT_PATH="${BASH_SOURCE}"
+    SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
+    $SCRIPT_DIR/test2.sh
+fi
 
 ##  TODO: Capture the script output and write it to the Body of the GitHub Release
 ##  script -c "sudo remote-bl602/scripts/test.sh" /tmp/test.script
