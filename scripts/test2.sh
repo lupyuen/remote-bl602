@@ -107,36 +107,47 @@ if [ "$match" == "" ]; then
     echo "ls /dev" >$USB_DEVICE ; sleep 1
     echo "spi_test2" >$USB_DEVICE ; sleep 5
 
-    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
-    echo "" >$USB_DEVICE
-    echo "lorawan_test" >$USB_DEVICE
-
-    ##  Wait a while for the test command to run
-    sleep 30
-
-    ##  Check whether BL602 has joined the LoRaWAN Network
+    ##  Check whether SX1262 is OK
     set +e  ##  Don't exit when any command fails
-    match=$(grep "JOINED" /tmp/test.log)
-    set -e  ##  Exit when any command fails
+    match=$(grep "SX1262 Register 8 is 0x80" /tmp/test.log)
+    set +e  ##  Don't exit when any command fails
 
-    ##  If BL602 has joined the LoRaWAN Network, then everything is super hunky dory!
+    ##  If SX1262 is not OK, quit
     if [ "$match" != "" ]; then
-        echo; echo "===== All OK! BL602 has successfully joined the LoRaWAN Network"
+        echo; echo "===== Error: SX1262 is NOT OK. Check the SPI connection"
+        test_status=unknown
+    else    
+        echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
+        echo "" >$USB_DEVICE
+        echo "lorawan_test" >$USB_DEVICE
 
-    else
-        ##  Check whether NuttX has booted properly
+        ##  Wait a while for the test command to run
+        sleep 30
+
+        ##  Check whether BL602 has joined the LoRaWAN Network
         set +e  ##  Don't exit when any command fails
-        match=$(grep "command not found" /tmp/test.log)
+        match=$(grep "JOINED" /tmp/test.log)
         set -e  ##  Exit when any command fails
 
-        ##  If NuttX has booted properly, show the status
+        ##  If BL602 has joined the LoRaWAN Network, then everything is super hunky dory!
         if [ "$match" != "" ]; then
-            echo; echo "===== Boot OK"
+            echo; echo "===== All OK! BL602 has successfully joined the LoRaWAN Network"
+
         else
-            echo; echo "===== Unknown Status"
+            ##  Check whether NuttX has booted properly
+            set +e  ##  Don't exit when any command fails
+            match=$(grep "command not found" /tmp/test.log)
+            set -e  ##  Exit when any command fails
+
+            ##  If NuttX has booted properly, show the status
+            if [ "$match" != "" ]; then
+                echo; echo "===== Boot OK"
+            else
+                echo; echo "===== Unknown Status"
+                test_status=unknown
+            fi
         fi
     fi
-
 else
     ##  If BL602 has crashed, do the Crash Analysis
     echo; echo "===== Boot FAILED. Below is the Crash Analysis"; echo
