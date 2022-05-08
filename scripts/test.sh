@@ -124,6 +124,7 @@ if [ "$match" == "" ]; then
         ##  If SX1262 is not OK, quit
         if [ "$match" == "" ]; then
             echo; echo "===== Error: SX1262 is NOT OK. Check the SPI connection"
+            test_status=unknown
         else
             echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
             echo "" >$USB_DEVICE
@@ -214,7 +215,7 @@ echo
 
 ##  If status is unknown, start the second script
 if [ "$test_status" == "unknown" ]; then
-    read -p "Disconnect and reconnect the USB cable. Press Enter to continue..."
+    read -p "Disconnect and reconnect the USB cable. Press Enter, Ctrl-A, K..."
     screen $USB_DEVICE 2000000
     SCRIPT_PATH="${BASH_SOURCE}"
     SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"

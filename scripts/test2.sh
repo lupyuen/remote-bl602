@@ -124,6 +124,7 @@ if [ "$match" == "" ]; then
         ##  If SX1262 is not OK, quit
         if [ "$match" == "" ]; then
             echo; echo "===== Error: SX1262 is NOT OK. Check the SPI connection"
+            test_status=unknown
         else
             echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
             echo "" >$USB_DEVICE
