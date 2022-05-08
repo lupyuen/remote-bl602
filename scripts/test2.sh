@@ -103,17 +103,16 @@ set -e  ##  Exit when any command fails
 
 if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, send the test command to BL602
-    # echo "uname -a" >$USB_DEVICE ; sleep 1
-    # echo "ls /dev" >$USB_DEVICE ; sleep 1
-    # echo "spi_test2" >$USB_DEVICE ; sleep 5
+    echo "uname -a" >$USB_DEVICE ; sleep 1
+    echo "ls /dev" >$USB_DEVICE ; sleep 1
+    echo "spi_test2" >$USB_DEVICE ; sleep 5
 
-    # echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
-    # echo "" >$USB_DEVICE
-    # echo "lorawan_test" >$USB_DEVICE
+    echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
+    echo "" >$USB_DEVICE
+    echo "lorawan_test" >$USB_DEVICE
 
     ##  Wait a while for the test command to run
-    # sleep 30
-    sleep 1
+    sleep 30
 
     ##  Check whether BL602 has joined the LoRaWAN Network
     set +e  ##  Don't exit when any command fails
