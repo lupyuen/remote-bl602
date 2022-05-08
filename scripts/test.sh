@@ -105,7 +105,7 @@ if [ "$match" == "" ]; then
     ##  If BL602 has not crashed, send the test command to BL602
     echo "uname -a" >$USB_DEVICE ; sleep 1
     echo "ls /dev" >$USB_DEVICE ; sleep 1
-    echo "spi_test2" >$USB_DEVICE ; sleep 5
+    echo "spi_test2" >$USB_DEVICE ; sleep 2
 
     ##  Check whether SX1262 is OK
     set +e  ##  Don't exit when any command fails
