@@ -113,7 +113,7 @@ if [ "$match" == "" ]; then
     set +e  ##  Don't exit when any command fails
 
     ##  If SX1262 is not OK, quit
-    if [ "$match" != "" ]; then
+    if [ "$match" == "" ]; then
         echo; echo "===== Error: SX1262 is NOT OK. Check the SPI connection"
     else
         echo ; echo "----- Send command to BL602: lorawan_test" ; sleep 2
