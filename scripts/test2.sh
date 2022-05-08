@@ -112,7 +112,8 @@ if [ "$match" == "" ]; then
     # echo "lorawan_test" >$USB_DEVICE
 
     ##  Wait a while for the test command to run
-    sleep 30
+    # sleep 30
+    sleep 1
 
     ##  Check whether BL602 has joined the LoRaWAN Network
     set +e  ##  Don't exit when any command fails
