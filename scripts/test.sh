@@ -215,7 +215,7 @@ echo
 
 ##  If status is unknown, start the second script
 if [ "$test_status" == "unknown" ]; then
-    read -p "Disconnect and reconnect the USB cable. Press Enter, Ctrl-A, K..."
+    read -p "Disconnect and reconnect the USB cable. Press Enter, Ctrl-A, K, Y..."
     screen $USB_DEVICE 2000000
     SCRIPT_PATH="${BASH_SOURCE}"
     SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
