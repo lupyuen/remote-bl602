@@ -55,9 +55,7 @@ Connect SBC to BL602 and SX1262 like so...
 | GPIO 2  | GPIO 8   |        | Flashing Mode
 | GPIO 3  | RST      | RESET  | Reset
 | GND     | GND      |        | Ground
-| USB 2.0 | USB      |        | USB UART
-
-Note: BL602 seems to work only with __USB 2.0, not USB 3.0!__ Perhaps the SX1262 LoRa Module gets insufficient power when connected to USB 3.0 on SBC.
+| USB     | USB      |        | USB UART
 
 For auto-testing LoRaWAN, also connect BL602 to SX1262 as described below...
 
@@ -142,9 +140,7 @@ We connect PineDio Stack BL604 to the SBC for Auto Flash and Test like so...
 | GPIO 5  | GPIO 8 _(GPIO Port)_  | Flashing Mode
 | GPIO 6  | RST _(JTAG Port)_     | Reset
 | GND     | GND _(JTAG Port)_     | Ground
-| USB 2.0 | USB Port            | USB UART
-
-Note: BL604 seems to work only with __USB 2.0, not USB 3.0!__ Perhaps the SX1262 LoRa Module gets insufficient power when connected to USB 3.0 on SBC.
+| USB     | USB Port              | USB UART
 
 __GPIO 8 Jumper must be set to Low (Non-Flashing Mode)!__
 
