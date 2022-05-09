@@ -116,7 +116,7 @@ if [ "$match" == "" ]; then
 
     ##  Check whether BL604 has responded to touch
     set +e  ##  Don't exit when any command fails
-    match=$(grep "cst816s_get_touch_data: UP: id=0, touch=2, x=" /tmp/test.log)
+    match=$(grep "cst816s_get_touch_data: UP: id=0, touch=" /tmp/test.log)
     set -e  ##  Exit when any command fails
 
     ##  If BL604 has responded to touch, then everything is super hunky dory!
