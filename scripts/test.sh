@@ -218,8 +218,7 @@ echo
 
 ##  If status is unknown, start the second script
 if [ "$test_status" == "unknown" ]; then
-    read -p "Disconnect USB cable. Disconnect GPIO 8. Disconnect Reset Pin. Set GPIO 8 Jumper to Low. Reconnect USB cable. Press Enter, Ctrl-A, K, Y..."
-    screen $USB_DEVICE 2000000
+    read -p "Possible LoRa Interference. Close the windows, pull the shades, close the drapes. Press Enter to retest..."
     SCRIPT_PATH="${BASH_SOURCE}"
     SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
     $SCRIPT_DIR/test2.sh
