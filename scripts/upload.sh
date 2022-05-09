@@ -15,7 +15,7 @@ gh release view \
     --repo lupyuen/incubator-nuttx \
     >/tmp/release.old
 
-##  Find the location of the Previous Test Log (```...)
+##  Find the position of the Previous Test Log, starting with "```"
 cat /tmp/release.old \
     | grep '```' --max-count=1 --byte-offset \
     | sed 's/:.*//g' \
@@ -31,8 +31,8 @@ else
     ##  Else copy the entire Release Notes
     cat /tmp/release.old \
         >>/tmp/release2.log
+    echo "" >>/tmp/release2.log
 fi
-echo "" >>/tmp/release2.log
 
 ##  Show the status
 grep "^===== " /tmp/release.log \
