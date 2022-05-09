@@ -9,19 +9,22 @@ set -x  ##  Echo commands
 rm -f /tmp/release2.log
 
 ##  Show the status
-grep "^===== " /tmp/release.log >>/tmp/release2.log
+grep "^===== " /tmp/release.log \
+    | colrm 1 6 \
+    >>/tmp/release2.log
 
-##  Enquote the log
+##  Enquote the log without Terminal Control Characters
+##  https://stackoverflow.com/questions/17998978/removing-colors-from-output
 echo '```text' >>/tmp/release2.log
-cat /tmp/release.log >>/tmp/release2.log
+cat /tmp/release.log \
+    | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" \
+    >>/tmp/release2.log
 echo '```' >>/tmp/release2.log
-
-cp /tmp/release2.log /tmp/release.log
 
 ##  Upload the Test Log to the Release Notes
 gh release edit \
     `cat /tmp/release.tag` \
-    --notes-file /tmp/release.log \
+    --notes-file /tmp/release2.log \
     --repo lupyuen/incubator-nuttx
 
 ##  Show the status
