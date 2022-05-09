@@ -13,7 +13,7 @@ gh release view \
     `cat /tmp/release.tag` \
     --json body --jq '.body' \
     --repo lupyuen/incubator-nuttx \
-    >>/tmp/release.old
+    >/tmp/release.old
 
 ##  Find the location of the Previous Test Log (```...)
 cat /tmp/release.old \
@@ -32,8 +32,6 @@ else
     cat /tmp/release.old \
         >>/tmp/release2.log
 fi
-
-exit 0 #####
 
 ##  Show the status
 grep "^===== " /tmp/release.log \
