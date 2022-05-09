@@ -22,7 +22,7 @@ cat /tmp/release.log \
     >>/tmp/release2.log
 echo '```' >>/tmp/release2.log
 
-##  Upload the Test Log to the Release Notes
+##  Upload the Test Log to the GitHub Release Notes
 gh release edit \
     `cat /tmp/release.tag` \
     --notes-file /tmp/release2.log \
