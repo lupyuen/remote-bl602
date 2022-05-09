@@ -18,11 +18,13 @@ If BL602 crashes, the script runs a Crash Analysis to show the RISC-V Disassembl
 
 The scripts are here...
 
--   [scripts/test.sh](scripts/test.sh)
+-   [scripts/test.sh](scripts/test.sh): Auto Flash and Test PineCone BL602
 
--   [scripts/pinedio.sh](scripts/pinedio.sh)
+-   [scripts/pinedio.sh](scripts/pinedio.sh): Auto Flash and Test PineDio Stack BL604
 
--   [scripts/pinedio2.sh](scripts/pinedio2.sh)
+-   [scripts/pinedio2.sh](scripts/pinedio2.sh): Called by pinedio.sh
+
+-   [scripts/upload.sh](scripts/upload.sh): Upload Test Log to GitHub Release Notes
 
 NuttX Builds are done by GitHub Actions...
 
@@ -125,6 +127,17 @@ We may also flash and test BL602 remotely over SSH...
 
 ```bash
 ssh my-sbc remote-bl602/scripts/test.sh
+```
+
+To __upload the Test Log__ to GitHub Release Notes...
+
+```bash
+##  Run the script for Auto Flash and Test, capture the Test Log
+rm -f /tmp/release.log
+script -c remote-bl602/scripts/test.sh /tmp/release.log
+
+##  Upload the Test Log to the GitHub Release Notes
+remote-bl602/scripts/upload.sh
 ```
 
 # PineDio Stack BL604
