@@ -17,7 +17,7 @@ grep "^===== " /tmp/release.log \
 ##  https://stackoverflow.com/questions/17998978/removing-colors-from-output
 echo '```text' >>/tmp/release2.log
 cat /tmp/release.log \
-    | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" \
+    | sed 's/\x1B[@A-Z\\\]^_]\|\x1B\[[0-9:;<=>?]*[-!"#$%&'"'"'()*+,.\/]*[][\\@A-Z^_`a-z{|}~]//g' \
     >>/tmp/release2.log
 echo '```' >>/tmp/release2.log
 
