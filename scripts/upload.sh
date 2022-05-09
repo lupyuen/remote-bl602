@@ -8,6 +8,33 @@ set -x  ##  Echo commands
 
 rm -f /tmp/release2.log
 
+##  Preserve the Auto-Generated Release Notes
+gh release view \
+    `cat /tmp/release.tag` \
+    --json body --jq '.body' \
+    --repo lupyuen/incubator-nuttx \
+    >>/tmp/release.old
+
+##  Find the location of the Previous Test Log (```...)
+cat /tmp/release.old \
+    | grep '```' --max-count=1 --byte-offset \
+    | sed 's/:.*//g' \
+    >/tmp/previous-log.txt
+prev=`cat /tmp/previous-log.txt`
+
+##  If Previous Test Log exists, discard it
+if [ "$prev" != '' ]; then
+    cat /tmp/release.old \
+        | head --bytes=$prev \
+        >>/tmp/release2.log
+else
+    ##  Else copy the entire Release Notes
+    cat /tmp/release.old \
+        >>/tmp/release2.log
+fi
+
+exit 0 #####
+
 ##  Show the status
 grep "^===== " /tmp/release.log \
     | colrm 1 6 \
