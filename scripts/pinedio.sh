@@ -38,6 +38,9 @@ unzip -o nuttx.zip
 popd
 set +x  ##  Disable echo
 
+##  Write the Release Tag for populating the Release Log later
+echo "$BUILD_PREFIX-$BUILD_DATE" >/tmp/release.tag
+
 echo "----- Enable GPIO 5 and 6"
 if [ ! -d /sys/class/gpio/gpio5 ]; then
     echo 5 >/sys/class/gpio/export ; sleep 1  ##  Must sleep or next GPIO command will fail with "Permission Denied"
