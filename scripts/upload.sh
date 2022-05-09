@@ -23,3 +23,6 @@ gh release edit \
     `cat /tmp/release.tag` \
     --notes-file /tmp/release.log \
     --repo lupyuen/incubator-nuttx
+
+##  Show the status
+grep "^===== " /tmp/release.log
