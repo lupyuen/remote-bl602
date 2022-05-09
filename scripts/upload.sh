@@ -32,6 +32,7 @@ else
     cat /tmp/release.old \
         >>/tmp/release2.log
 fi
+echo "" >>/tmp/release2.log
 
 ##  Show the status
 grep "^===== " /tmp/release.log \
