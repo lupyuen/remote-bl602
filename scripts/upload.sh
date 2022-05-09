@@ -8,10 +8,12 @@ set -x  ##  Echo commands
 
 rm -f /tmp/release2.log
 
-##  Preserve the Auto-Generated Release Notes
+##  Preserve the Auto-Generated GitHub Release Notes.
+##  Fetch the current GitHub Release Notes and extract the body text.
 gh release view \
     `cat /tmp/release.tag` \
-    --json body --jq '.body' \
+    --json body \
+    --jq '.body' \
     --repo lupyuen/incubator-nuttx \
     >/tmp/release.old
 
@@ -39,7 +41,7 @@ grep "^===== " /tmp/release.log \
     | colrm 1 6 \
     >>/tmp/release2.log
 
-##  Enquote the log without Carriage Return and Terminal Control Characters
+##  Enquote the Test Log without Carriage Return and Terminal Control Characters
 ##  https://stackoverflow.com/questions/17998978/removing-colors-from-output
 echo '```text' >>/tmp/release2.log
 cat /tmp/release.log \
