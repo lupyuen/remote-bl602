@@ -320,6 +320,38 @@ gh release edit \
     --repo lupyuen/incubator-nuttx
 ```
 
+# SPI Test Failure
+
+Our Auto Test Scripts `test.sh` and `pinedio.sh` will check that the SX1262 LoRa Transceiver responds correctly to SPI Commands (like reading registers)...
+
+```text
+nsh> spi_test2
+Get Status: received
+  a2 22 
+SX1262 Status is 2
+Read Register 8: received
+  a2 a2 a2 a2 80 
+SX1262 Register 8 is 0x80
+SX1262 is OK
+```
+
+This says that SX1262 Register 8 has value `0x80`, which is correct.
+
+If we see this error on BL602...
+
+```text
+SX1262 Register 8 is 0x00
+Error: SX1262 is NOT OK. Check the SPI connection
+```
+
+Check that the SX1262 Reset Pin is connected properly to the BL602 Reset Pin.
+
+(Which is connected to SBC GPIO 3)
+
+# LoRaWAN Test Failure
+
+TODO
+
 # Output Log for Upstream Build
 
 Below is the log for the __Daily Upstream Build__ (without the LoRaWAN Stack)...
