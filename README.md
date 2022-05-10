@@ -139,6 +139,8 @@ script -c remote-bl602/scripts/test.sh /tmp/release.log
 remote-bl602/scripts/upload.sh
 ```
 
+[(See the Test Log)](https://github.com/lupyuen/incubator-nuttx/releases/tag/pinedio-2022-05-10)
+
 More about this below.
 
 # PineDio Stack BL604
@@ -233,17 +235,24 @@ script -c remote-bl602/scripts/test.sh /tmp/release.log
 remote-bl602/scripts/upload.sh
 ```
 
+[(See the Test Log)](https://github.com/lupyuen/incubator-nuttx/releases/tag/pinedio-2022-05-10)
+
 The `script` command runs the Auto Flash and Test Script `test.sh`, and captures the Test Log to `/tmp/release.log`.
 
 Then we run this script to upload the Test Log to GitHub Release Notes...
 
 -   [scripts/upload.sh](scripts/upload.sh)
 
-TODO
+The `upload.sh` script begins by calling the GitHub CLI to download the Auto-Generated GitHub Release Notes (populated by the GitHub Actions Build)...
 
 ```bash
+##  Assumes the following files are present...
+##  /tmp/release.log: Test Log
+##  /tmp/release.tag: Release Tag (like pinedio-2022-05-10)
+
 ##  Preserve the Auto-Generated GitHub Release Notes.
-##  Fetch the current GitHub Release Notes and extract the body text.
+##  Fetch the current GitHub Release Notes and extract the body text, like:
+##  "Merge updates from master by @lupyuen in https://github.com/lupyuen/incubator-nuttx/pull/82"
 gh release view \
     `cat /tmp/release.tag` \
     --json body \
@@ -252,7 +261,7 @@ gh release view \
     >/tmp/release.old
 ```
 
-TODO
+In case the script is run twice, we search for the Previous Test Log...
 
 ```bash
 ##  Find the position of the Previous Test Log, starting with "```"
@@ -263,7 +272,7 @@ cat /tmp/release.old \
 prev=`cat /tmp/previous-log.txt`
 ```
 
-TODO
+And we remove the Previous Test Log, while preserving the Auto-Generated GitHub Release Notes...
 
 ```bash
 ##  If Previous Test Log exists, discard it
@@ -279,16 +288,16 @@ else
 fi
 ```
 
-TODO
+Just before adding the Test Log, we insert the Test Status...
 
 ```bash
-##  Show the status
+##  Show the Test Status, like "All OK! BL602 has successfully joined the LoRaWAN Network"
 grep "^===== " /tmp/release.log \
     | colrm 1 6 \
     >>/tmp/release2.log
 ```
 
-TODO
+Then we embed the Test Log, taking care of the Special Characters...
 
 ```bash
 ##  Enquote the Test Log without Carriage Return and Terminal Control Characters
@@ -301,7 +310,7 @@ cat /tmp/release.log \
 echo '```' >>/tmp/release2.log
 ```
 
-TODO
+Finally we call the GitHub CLI to upload the Auto-Generated GitHub Release Notes appended with the Test Log...
 
 ```bash
 ##  Upload the Test Log to the GitHub Release Notes
@@ -310,8 +319,6 @@ gh release edit \
     --notes-file /tmp/release2.log \
     --repo lupyuen/incubator-nuttx
 ```
-
-TODO
 
 # Output Log for Upstream Build
 

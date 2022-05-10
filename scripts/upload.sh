@@ -36,7 +36,7 @@ else
     echo "" >>/tmp/release2.log
 fi
 
-##  Show the status
+##  Show the Test Status
 grep "^===== " /tmp/release.log \
     | colrm 1 6 \
     >>/tmp/release2.log
@@ -56,5 +56,5 @@ gh release edit \
     --notes-file /tmp/release2.log \
     --repo lupyuen/incubator-nuttx
 
-##  Show the status
+##  Show the Test Status
 grep "^===== " /tmp/release.log
