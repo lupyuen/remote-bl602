@@ -123,7 +123,7 @@ remote-bl602/scripts/pinedio2.sh
 
 (See the output log below)
 
-We may also flash and test BL602 remotely over SSH...
+We may also __flash and test BL602 remotely__ over SSH...
 
 ```bash
 ssh my-sbc remote-bl602/scripts/test.sh
@@ -133,12 +133,13 @@ To __upload the Test Log__ to GitHub Release Notes...
 
 ```bash
 ##  Run the script for Auto Flash and Test, capture the Test Log
-rm -f /tmp/release.log
 script -c remote-bl602/scripts/test.sh /tmp/release.log
 
 ##  Upload the Test Log to the GitHub Release Notes
 remote-bl602/scripts/upload.sh
 ```
+
+More about this below.
 
 # PineDio Stack BL604
 
@@ -219,6 +220,98 @@ remote-bl602/scripts/pinedio2.sh
 ```
 
 TODO: Fix the script to use the correct USB Device
+
+# Upload Test Log
+
+To __upload the Test Log__ to GitHub Release Notes...
+
+```bash
+##  Run the script for Auto Flash and Test, capture the Test Log
+script -c remote-bl602/scripts/test.sh /tmp/release.log
+
+##  Upload the Test Log to the GitHub Release Notes
+remote-bl602/scripts/upload.sh
+```
+
+The `script` command runs the Auto Flash and Test Script `test.sh`, and captures the Test Log to `/tmp/release.log`.
+
+Then we run this script to upload the Test Log to GitHub Release Notes...
+
+-   [scripts/upload.sh](scripts/upload.sh)
+
+TODO
+
+```bash
+##  Preserve the Auto-Generated GitHub Release Notes.
+##  Fetch the current GitHub Release Notes and extract the body text.
+gh release view \
+    `cat /tmp/release.tag` \
+    --json body \
+    --jq '.body' \
+    --repo lupyuen/incubator-nuttx \
+    >/tmp/release.old
+```
+
+TODO
+
+```bash
+##  Find the position of the Previous Test Log, starting with "```"
+cat /tmp/release.old \
+    | grep '```' --max-count=1 --byte-offset \
+    | sed 's/:.*//g' \
+    >/tmp/previous-log.txt
+prev=`cat /tmp/previous-log.txt`
+```
+
+TODO
+
+```bash
+##  If Previous Test Log exists, discard it
+if [ "$prev" != '' ]; then
+    cat /tmp/release.old \
+        | head --bytes=$prev \
+        >>/tmp/release2.log
+else
+    ##  Else copy the entire Release Notes
+    cat /tmp/release.old \
+        >>/tmp/release2.log
+    echo "" >>/tmp/release2.log
+fi
+```
+
+TODO
+
+```bash
+##  Show the status
+grep "^===== " /tmp/release.log \
+    | colrm 1 6 \
+    >>/tmp/release2.log
+```
+
+TODO
+
+```bash
+##  Enquote the Test Log without Carriage Return and Terminal Control Characters
+##  https://stackoverflow.com/questions/17998978/removing-colors-from-output
+echo '```text' >>/tmp/release2.log
+cat /tmp/release.log \
+    | tr -d '\r' \
+    | sed 's/\x1B[@A-Z\\\]^_]\|\x1B\[[0-9:;<=>?]*[-!"#$%&'"'"'()*+,.\/]*[][\\@A-Z^_`a-z{|}~]//g' \
+    >>/tmp/release2.log
+echo '```' >>/tmp/release2.log
+```
+
+TODO
+
+```bash
+##  Upload the Test Log to the GitHub Release Notes
+gh release edit \
+    `cat /tmp/release.tag` \
+    --notes-file /tmp/release2.log \
+    --repo lupyuen/incubator-nuttx
+```
+
+TODO
 
 # Output Log for Upstream Build
 
