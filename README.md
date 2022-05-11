@@ -1,10 +1,12 @@
 # Flash and Test BL602 Remotely via a Linux Single-Board Computer
 
-Read the article...
+Read the articles...
 
 -   ["Auto Flash and Test NuttX on RISC-V BL602"](https://lupyuen.github.io/articles/auto)
 
-Watch the demo on YouTube...
+-   ["(Mostly) Automated Testing of Apache NuttX RTOS on PineDio Stack BL604 RISC-V Board"](https://lupyuen.github.io/articles/auto2)
+
+Watch the demos on YouTube...
 
 -   ["Auto Flash and Test on PineDio Stack BL604"](https://youtu.be/JX7rWqWTOW4)
 
