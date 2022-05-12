@@ -18,10 +18,12 @@ gh release view \
     >/tmp/release.old
 
 ##  Find the position of the Previous Test Log, starting with "```"
+set +e  ##  Don't exit when any command fails
 cat /tmp/release.old \
     | grep '```' --max-count=1 --byte-offset \
     | sed 's/:.*//g' \
     >/tmp/previous-log.txt
+set -e  ##  Exit when any command fails
 prev=`cat /tmp/previous-log.txt`
 
 ##  If Previous Test Log exists, discard it
@@ -37,9 +39,11 @@ else
 fi
 
 ##  Show the Test Status
+set +e  ##  Don't exit when any command fails
 grep "^===== " /tmp/release.log \
     | colrm 1 6 \
     >>/tmp/release2.log
+set -e  ##  Exit when any command fails
 
 ##  Enquote the Test Log without Carriage Return and Terminal Control Characters
 ##  https://stackoverflow.com/questions/17998978/removing-colors-from-output
@@ -57,4 +61,6 @@ gh release edit \
     --repo lupyuen/incubator-nuttx
 
 ##  Show the Test Status
+set +e  ##  Don't exit when any command fails
 grep "^===== " /tmp/release.log
+set -e  ##  Exit when any command fails
