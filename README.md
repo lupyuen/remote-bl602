@@ -75,7 +75,8 @@ sudo usermod -a -G dialout $USER
 ##  Logout and login to refresh the permissions
 logout
 
-##  Install rustup, select default option
+##  Install rustup, select default option.
+##  See https://rustup.rs/
 sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sudo sh
 
 ##  Install blflash for flashing BL602
@@ -116,11 +117,8 @@ remote-bl602/scripts/test.sh
 For __PineDio Stack BL604__...
 
 ```bash
-##  Auto flash and test PineDio Stack BL604: LoRaWAN Test
+##  Auto flash and test PineDio Stack BL604
 remote-bl602/scripts/pinedio.sh
-
-##  Auto test PineDio Stack BL604: Touchscreen Test
-remote-bl602/scripts/pinedio2.sh
 ```
 
 (See the output log below)
@@ -216,11 +214,8 @@ Here's how we override the Default USB Device for PineDio Stack...
 ##  Tell the script to use /dev/ttyUSB1
 export USB_DEVICE=/dev/ttyUSB1
 
-##  Auto flash and test PineDio Stack BL604: LoRaWAN Test
+##  Auto flash and test PineDio Stack BL604
 remote-bl602/scripts/pinedio.sh
-
-##  Auto test PineDio Stack BL604: Touchscreen Test
-remote-bl602/scripts/pinedio2.sh
 ```
 
 TODO: Fix the script to use the correct USB Device
