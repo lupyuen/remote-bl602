@@ -4,18 +4,19 @@
 ## /tmp/release.tag: Release Tag
 
 set -e  ##  Exit when any command fails
-set -x  ##  Echo commands
 
 rm -f /tmp/release2.log
 
 ##  Preserve the Auto-Generated GitHub Release Notes.
 ##  Fetch the current GitHub Release Notes and extract the body text.
+set -x  ##  Echo commands
 gh release view \
     `cat /tmp/release.tag` \
     --json body \
     --jq '.body' \
     --repo lupyuen/incubator-nuttx \
     >/tmp/release.old
+set +x  ##  Don't echo commands
 
 ##  Find the position of the Previous Test Log, starting with "```"
 set +e  ##  Don't exit when any command fails
@@ -55,10 +56,12 @@ cat /tmp/release.log \
 echo '```' >>/tmp/release2.log
 
 ##  Upload the Test Log to the GitHub Release Notes
+set -x  ##  Echo commands
 gh release edit \
     `cat /tmp/release.tag` \
     --notes-file /tmp/release2.log \
     --repo lupyuen/incubator-nuttx
+set +x  ##  Don't echo commands
 
 ##  Show the Test Status
 set +e  ##  Don't exit when any command fails
