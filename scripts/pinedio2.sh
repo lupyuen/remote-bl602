@@ -1,17 +1,10 @@
 #!/usr/bin/env bash
-## Auto Flash and Test PineDio Stack BL604 with GPIO Control on Linux SBC.
-## Pins to be connected:
-## | SBC    | BL604    | Function
-## | -------|----------|----------
-## | GPIO 5 | GPIO 8   | Flashing Mode
-## | GPIO 6 | RST      | Reset
-## | GND    | GND      | Ground
-## | USB    | USB      | USB UART
+## Called by pinedio.sh to run LVGL Test
 
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
-##  Default Build Prefix is "upstream"
+##  Default Build Prefix is "pinedio"
 if [ "$BUILD_PREFIX" == '' ]; then
     export BUILD_PREFIX=pinedio
 fi

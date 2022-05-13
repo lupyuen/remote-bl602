@@ -11,7 +11,7 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
-##  Default Build Prefix is "upstream"
+##  Default Build Prefix is "pinedio"
 if [ "$BUILD_PREFIX" == '' ]; then
     export BUILD_PREFIX=pinedio
 fi
