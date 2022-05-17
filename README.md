@@ -75,18 +75,30 @@ sudo usermod -a -G dialout $USER
 ##  Logout and login to refresh the permissions
 logout
 
-##  Install rustup, select default option.
-##  See https://rustup.rs/
-sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sudo sh
+##  TODO: Install rustup, select default option.
+##  See https://rustup.rs
 
-##  Install blflash for flashing BL602
+##  Install blflash for flashing PineDio Stack
+##  https://github.com/spacemeowx2/blflash
 cargo install blflash
 
 ##  Download the flash and test script
 git clone --recursive https://github.com/lupyuen/remote-bl602/
 
-##  Auto flash and test BL602
-remote-bl602/scripts/test.sh
+##  Always sync the clock before running the script
+sudo apt install ntpdate
+sudo ntpdate -u time.nist.gov
+date
+
+##  Run the script for Auto Flash and Test.
+##  Capture the Test Log in /tmp/release.log
+script -c remote-bl602/scripts/test.sh /tmp/release.log
+
+##  TODO: Install the GitHub CLI for uploading Release Notes
+##  See https://cli.github.com
+
+##  Optional: Upload the Test Log to the GitHub Release Notes
+remote-bl602/scripts/upload.sh
 ```
 
 (See the output log below)
@@ -110,38 +122,26 @@ To select the __Downstream Build__ by __Build Date__...
 export BUILD_PREFIX=downstream
 export BUILD_DATE=2022-05-04
 
-##  Auto flash and test BL602
-remote-bl602/scripts/test.sh
+##  Run the script for Auto Flash and Test.
+##  Capture the Test Log in /tmp/release.log
+script -c remote-bl602/scripts/test.sh /tmp/release.log
 ```
 
 For __PineDio Stack BL604__...
 
 ```bash
-##  Auto flash and test PineDio Stack BL604
-remote-bl602/scripts/pinedio.sh
+##  Run the script for Auto Flash and Test for PineDio Stack BL604.
+##  Capture the Test Log in /tmp/release.log
+script -c remote-bl602/scripts/pinedio.sh /tmp/release.log
 ```
 
-(See the output log below)
+[(See the Test Log)](https://github.com/lupyuen/incubator-nuttx/releases/tag/pinedio-2022-05-10)
 
 We may also __flash and test BL602 remotely__ over SSH...
 
 ```bash
 ssh my-sbc remote-bl602/scripts/test.sh
 ```
-
-To __upload the Test Log__ to GitHub Release Notes...
-
-```bash
-##  Run the script for Auto Flash and Test, capture the Test Log
-script -c remote-bl602/scripts/test.sh /tmp/release.log
-
-##  Upload the Test Log to the GitHub Release Notes
-remote-bl602/scripts/upload.sh
-```
-
-[(See the Test Log)](https://github.com/lupyuen/incubator-nuttx/releases/tag/pinedio-2022-05-10)
-
-More about this below.
 
 # PineDio Stack BL604
 
