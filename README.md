@@ -94,8 +94,8 @@ date
 ##  Capture the Test Log in /tmp/release.log
 script -c remote-bl602/scripts/test.sh /tmp/release.log
 
-##  TODO: Install the GitHub CLI for uploading Release Notes
-##  See https://cli.github.com
+##  TODO: Install the GitHub CLI for uploading Release Notes: https://cli.github.com
+##  Log in a GitHub Token that has "repo" and "read:org" permissions
 
 ##  Optional: Upload the Test Log to the GitHub Release Notes
 remote-bl602/scripts/upload.sh
@@ -227,6 +227,9 @@ To __upload the Test Log__ to GitHub Release Notes...
 ```bash
 ##  Run the script for Auto Flash and Test, capture the Test Log
 script -c remote-bl602/scripts/test.sh /tmp/release.log
+
+##  TODO: Install the GitHub CLI for uploading Release Notes: https://cli.github.com
+##  Log in a GitHub Token that has "repo" and "read:org" permissions
 
 ##  Upload the Test Log to the GitHub Release Notes
 remote-bl602/scripts/upload.sh
