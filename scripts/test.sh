@@ -38,6 +38,11 @@ unzip -o nuttx.zip
 popd
 set +x  ##  Disable echo
 
+## Print the Commit Hashes
+if [ -f /tmp/nuttx.hash ]; then
+    cat /tmp/nuttx.hash
+fi
+
 ##  Write the Release Tag for populating the Release Log later
 echo "$BUILD_PREFIX-$BUILD_DATE" >/tmp/release.tag
 
