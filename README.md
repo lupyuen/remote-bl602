@@ -20,6 +20,8 @@ If BL602 crashes, the script runs a Crash Analysis to show the RISC-V Disassembl
 
 The scripts are here...
 
+-   [scripts/task.sh](scripts/task.sh): Automated Task for BL602 Flash and Test
+
 -   [scripts/test.sh](scripts/test.sh): Auto Flash and Test PineCone BL602
 
 -   [scripts/pinedio.sh](scripts/pinedio.sh): Auto Flash and Test PineDio Stack BL604
