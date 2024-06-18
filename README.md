@@ -22,7 +22,9 @@ The scripts are here...
 
 -   [scripts/task.sh](scripts/task.sh): Automated Task for BL602 Flash and Test
 
--   [scripts/test.sh](scripts/test.sh): Auto Flash and Test PineCone BL602
+-   [scripts/ssh.exp](scripts/ssh.exp): Expect Script for SSH to SBC
+
+-   [scripts/test.sh](scripts/test.sh): Auto Flash and Test PineCone BL602 on SBC
 
 -   [scripts/pinedio.sh](scripts/pinedio.sh): Auto Flash and Test PineDio Stack BL604
 
