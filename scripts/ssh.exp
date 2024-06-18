@@ -1,0 +1,30 @@
+#!/usr/bin/expect
+## Expect Script for Testing NuttX over SSH to SBC
+
+## Wait at most 300 seconds
+set timeout 300
+
+## For every 1 character sent, wait 0.001 milliseconds
+set send_slow {1 0.001}
+
+## Connect to SBC over SSH
+spawn ssh pi
+
+## Wake up SBC
+send -s "\r"
+
+## Wait for Test Log to be uploaded
+expect "gh release edit"
+
+expect {
+  ## Wait for the shutdown prompt, then shut down the SBC
+  "Press Enter to shutdown" { 
+    send -s "\r"
+    exit 0 
+  }
+
+  ## If timeout, exit with an error
+  timeout { 
+    exit 1 
+  }
+}
