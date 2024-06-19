@@ -18,15 +18,11 @@ SCRIPT_PATH="${BASH_SOURCE}"
 SCRIPT_DIR="$(cd -P "$(dirname -- "${SCRIPT_PATH}")" >/dev/null 2>&1 && pwd)"
 
 ## Wait for GitHub Release, then SSH to SBC for Flash and Test
-function flash_and_test {
-
-  ## Default Build Date is today (YYYY-MM-DD)
-  if [ "$BUILD_DATE" == '' ]; then
-    export BUILD_DATE=$(date +'%Y-%m-%d')
-  fi
+function test_nuttx {
 
   ## If NuttX Build already downloaded, quit
-  NUTTX_ZIP=/tmp/$BUILD_PREFIX-$BUILD_DATE-nuttx.zip
+  local date=$1
+  NUTTX_ZIP=/tmp/$BUILD_PREFIX-$date-nuttx.zip
   if [ -e $NUTTX_ZIP ] 
   then
     return
@@ -34,7 +30,7 @@ function flash_and_test {
 
   echo "----- Download the NuttX Build"
   wget -q \
-    https://github.com/lupyuen/incubator-nuttx/releases/download/$BUILD_PREFIX-$BUILD_DATE/nuttx.zip \
+    https://github.com/lupyuen/incubator-nuttx/releases/download/$BUILD_PREFIX-$date/nuttx.zip \
     -O $NUTTX_ZIP \
     || true
 
@@ -77,10 +73,21 @@ function flash_and_test {
   echo flash_and_test OK!
 }
 
+## If Build Date is specified: Run once and quit
+if [ "$BUILD_DATE" != '' ]; then
+  test_nuttx $BUILD_DATE
+  exit
+fi
+
 ## Wait for GitHub Release, then SSH to SBC for Flash and Test
 for (( ; ; ))
 do
-  flash_and_test
+  ## Default Build Date is today (YYYY-MM-DD)
+  BUILD_DATE=$(date +'%Y-%m-%d')
+  test_nuttx $BUILD_DATE
+
+  ## Wait a while
+  date
   sleep 600
 done
 echo Done!
