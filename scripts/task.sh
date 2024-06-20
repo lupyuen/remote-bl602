@@ -6,7 +6,9 @@ set -x  ##  Echo commands
 
 ## Get the Home Assistant Token, copied from http://localhost:8123/profile/security
 ## token=xxxx
+set +x  ##  Disable echo
 . $HOME/home-assistant-token.sh
+set -x  ##  Enable echo
 
 ## Default Build Prefix is "upstream"
 if [ "$BUILD_PREFIX" == '' ]; then
@@ -41,6 +43,7 @@ function test_nuttx {
     return
   fi
 
+  set +x  ##  Disable echo
   echo "----- Power Off the SBC"
   curl \
     -X POST \
@@ -48,7 +51,9 @@ function test_nuttx {
     -H "Content-Type: application/json" \
     -d '{"entity_id": "automation.pi_power_off"}' \
     http://localhost:8123/api/services/automation/trigger
+  set -x  ##  Enable echo
 
+  set +x  ##  Disable echo
   echo "----- Power On the SBC"
   curl \
     -X POST \
@@ -56,6 +61,7 @@ function test_nuttx {
     -H "Content-Type: application/json" \
     -d '{"entity_id": "automation.pi_power_on"}' \
     http://localhost:8123/api/services/automation/trigger
+  set -x  ##  Enable echo
 
   echo "----- Wait for SBC to power on"
   sleep 30
@@ -63,6 +69,7 @@ function test_nuttx {
   echo "----- SSH to SBC for BL602 Flash and Test"
   $SCRIPT_DIR/ssh.exp || true
 
+  set +x  ##  Disable echo
   echo "----- Power Off the SBC"
   curl \
     -X POST \
@@ -70,6 +77,8 @@ function test_nuttx {
     -H "Content-Type: application/json" \
     -d '{"entity_id": "automation.pi_power_off"}' \
     http://localhost:8123/api/services/automation/trigger
+  set -x  ##  Enable echo
+
   echo flash_and_test OK!
 }
 
