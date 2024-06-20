@@ -4,12 +4,6 @@
 set -e  ##  Exit when any command fails
 set -x  ##  Echo commands
 
-## Get the Home Assistant Token, copied from http://localhost:8123/profile/security
-## token=xxxx
-set +x  ##  Disable echo
-. $HOME/home-assistant-token.sh
-set -x  ##  Enable echo
-
 ## Default Build Prefix is "upstream"
 if [ "$BUILD_PREFIX" == '' ]; then
   export BUILD_PREFIX=upstream
@@ -42,6 +36,12 @@ function test_nuttx {
     rm $NUTTX_ZIP
     return
   fi
+
+  ## Get the Home Assistant Token, copied from http://localhost:8123/profile/security
+  ## token=xxxx
+  set +x  ##  Disable echo
+  . $HOME/home-assistant-token.sh
+  set -x  ##  Enable echo
 
   set +x  ##  Disable echo
   echo "----- Power Off the SBC"
