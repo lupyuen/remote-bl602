@@ -64,7 +64,7 @@ function test_nuttx {
   set -x  ##  Enable echo
 
   echo "----- Wait for SBC to power on"
-  sleep 30
+  sleep 60
 
   echo "----- SSH to SBC for BL602 Flash and Test"
   $SCRIPT_DIR/ssh.exp || true
